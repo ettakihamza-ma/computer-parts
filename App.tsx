@@ -630,7 +630,7 @@ export default function App() {
 
       {/* Footer */}
       <div className="fixed bottom-2 w-full text-center text-gray-400 text-sm font-bold pointer-events-none z-50 mix-blend-multiply opacity-70">
-        With ❤️ By <a href="https://www.linkedin.com/in/hamza-ettaki/" target="_blank" rel="noopener noreferrer" className="hover:text-kid-blue pointer-events-auto">Hamza Ettaki</a>
+        With ❤️ By <a href="https://www.linkedin.com/in/ettaki/" target="_blank" rel="noopener noreferrer" className="hover:text-kid-blue pointer-events-auto">Hamza Ettaki</a>
       </div>
     </div>
   );
