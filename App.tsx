@@ -4,6 +4,8 @@ import { COMPUTER_PARTS, getIcon } from './constants';
 import { playLocalAudio } from './services/audioService';
 import { ArrowLeft, ArrowRight, Monitor, Gamepad2, Volume2, Search, Brain, HelpCircle } from 'lucide-react';
 import { DeskMonitor, DeskKeyboard, DeskMouse, DeskTower, DeskSpeaker, DeskPrinter } from './components/DeskParts';
+import { WordSearchGame } from './components/WordSearchGame';
+import { SaveTheRobotGame } from './components/SaveTheRobotGame';
 
 // Interface for Memory Card
 interface MemoryCard {
@@ -256,23 +258,45 @@ export default function App() {
 
       <h2 className="text-4xl md:text-5xl font-bold text-kid-blue mb-12 font-sans">{t.play}</h2>
 
-      <div className="flex flex-col md:flex-row gap-8 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 max-w-4xl">
         {/* Game 1: Find It */}
         <button
           onClick={startFindGame}
-          className="bg-blue-400 hover:bg-blue-300 text-white p-8 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-72 border-b-8 border-blue-600 group"
+          className="bg-blue-400 hover:bg-blue-300 text-white p-6 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-full border-b-8 border-blue-600 group"
         >
-          <Search size={64} className="mb-4 group-hover:scale-110 transition-transform" />
-          <span className="text-2xl font-bold font-sans">{t.gameFindTitle}</span>
+          <Search size={48} className="mb-4 group-hover:scale-110 transition-transform" />
+          <span className="text-xl font-bold font-sans">{t.gameFindTitle}</span>
         </button>
 
         {/* Game 2: Memory */}
         <button
           onClick={startMemoryGame}
-          className="bg-purple-400 hover:bg-purple-300 text-white p-8 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-72 border-b-8 border-purple-600 group"
+          className="bg-purple-400 hover:bg-purple-300 text-white p-6 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-full border-b-8 border-purple-600 group"
         >
-          <Brain size={64} className="mb-4 group-hover:scale-110 transition-transform" />
-          <span className="text-2xl font-bold font-sans">{t.gameMemoryTitle}</span>
+          <Brain size={48} className="mb-4 group-hover:scale-110 transition-transform" />
+          <span className="text-xl font-bold font-sans">{t.gameMemoryTitle}</span>
+        </button>
+
+        {/* Game 3: Word Search */}
+        <button
+          onClick={() => setView(AppView.GAME_WORDSEARCH)}
+          className="bg-green-400 hover:bg-green-300 text-white p-6 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-full border-b-8 border-green-600 group"
+        >
+          <ArrowRight size={48} className="mb-4 group-hover:scale-110 transition-transform" />
+          <span className="text-xl font-bold font-sans">
+            {language === 'fr' ? 'Mots Mêlés' : language === 'en' ? 'Word Search' : 'كلمات متقاطعة'}
+          </span>
+        </button>
+
+        {/* Game 4: Save the Robot */}
+        <button
+          onClick={() => setView(AppView.GAME_ROBOT)}
+          className="bg-red-400 hover:bg-red-300 text-white p-6 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-full border-b-8 border-red-600 group"
+        >
+          <Gamepad2 size={48} className="mb-4 group-hover:scale-110 transition-transform" />
+          <span className="text-xl font-bold font-sans">
+            {language === 'fr' ? 'Sauve le Robot' : language === 'en' ? 'Save the Robot' : 'انقذ الروبوت'}
+          </span>
         </button>
       </div>
     </div>
@@ -589,10 +613,24 @@ export default function App() {
       {view === AppView.PLAY_MENU && renderPlayMenu()}
       {view === AppView.GAME_FIND && renderFindGame()}
       {view === AppView.GAME_MEMORY && renderMemoryGame()}
+      {view === AppView.GAME_WORDSEARCH && (
+        <WordSearchGame
+          parts={COMPUTER_PARTS}
+          language={language}
+          onBack={goPlayMenu}
+        />
+      )}
+      {view === AppView.GAME_ROBOT && (
+        <SaveTheRobotGame
+          parts={COMPUTER_PARTS}
+          language={language}
+          onBack={goPlayMenu}
+        />
+      )}
 
       {/* Footer */}
       <div className="fixed bottom-2 w-full text-center text-gray-400 text-sm font-bold pointer-events-none z-50 mix-blend-multiply opacity-70">
-        With ❤️ By Hamza Ettaki
+        With ❤️ By <a href="https://www.linkedin.com/in/hamza-ettaki/" target="_blank" rel="noopener noreferrer" className="hover:text-kid-blue pointer-events-auto">Hamza Ettaki</a>
       </div>
     </div>
   );

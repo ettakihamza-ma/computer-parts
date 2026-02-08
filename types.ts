@@ -5,9 +5,11 @@ export type Language = 'fr' | 'en' | 'ar';
 export enum AppView {
   HOME = 'HOME',
   LEARN = 'LEARN',
-  PLAY_MENU = 'PLAY_MENU',
-  GAME_FIND = 'GAME_FIND',
-  GAME_MEMORY = 'GAME_MEMORY',
+  PLAY_MENU = 'play_menu',
+  GAME_FIND = 'game_find',
+  GAME_MEMORY = 'game_memory',
+  GAME_WORDSEARCH = 'game_wordsearch',
+  GAME_ROBOT = 'game_robot',
   DESK = 'DESK'
 }
 
