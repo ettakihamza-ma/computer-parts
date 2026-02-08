@@ -2,6 +2,8 @@ import { LucideIcon } from 'lucide-react';
 
 export type Language = 'fr' | 'en' | 'ar';
 
+export type ComputerLevel = 'external' | 'internal';
+
 export enum AppView {
   HOME = 'HOME',
   LEARN = 'LEARN',

@@ -1,7 +1,7 @@
-import { ComputerPart, ComponentType } from './types';
-import { Monitor, Keyboard, Mouse, Speaker, Printer, Cpu } from 'lucide-react';
+import { ComputerPart, ComponentType, ComputerLevel } from './types';
+import { Monitor, Keyboard, Mouse, Speaker, Printer, Cpu, HardDrive, CircuitBoard, Calculator, Battery, Fan, Box } from 'lucide-react';
 
-export const COMPUTER_PARTS: ComputerPart[] = [
+export const EXTERNAL_PARTS: ComputerPart[] = [
   {
     id: 'monitor',
     name: {
@@ -144,7 +144,7 @@ export const COMPUTER_PARTS: ComputerPart[] = [
       ]
     },
     type: ComponentType.PROCESSING,
-    iconName: 'Cpu',
+    iconName: 'Box',
     color: 'bg-purple-400'
   },
   {
@@ -221,6 +221,248 @@ export const COMPUTER_PARTS: ComputerPart[] = [
   }
 ];
 
+export const INTERNAL_PARTS: ComputerPart[] = [
+  {
+    id: 'motherboard',
+    name: {
+      fr: 'Carte Mère',
+      en: 'Motherboard',
+      ar: 'اللوحة الأم'
+    },
+    action: 'Connecter',
+    description: {
+      fr: "C'est la grande planche verte où tout est branché.",
+      en: "It's the big green board where everything connects.",
+      ar: "إنها اللوحة الكبيرة التي يربط فيها كل شيء."
+    },
+    facts: {
+      fr: [
+        "Elle relie tous les composants entre eux, comme des routes dans une ville.",
+        "Sans elle, le processeur ne pourrait pas parler à la mémoire.",
+        "C'est la plus grande pièce à l'intérieur de l'ordinateur."
+      ],
+      en: [
+        "It connects all parts together like roads in a city.",
+        "Without it, parts cannot talk to each other.",
+        "It is the biggest part inside the computer."
+      ],
+      ar: [
+        "تربط جميع الأجزاء ببعضها مثل الطرق في المدينة.",
+        "بدونها لا تستطيع الأجزاء التحدث مع بعضها.",
+        "إنها أكبر قطعة داخل الحاسوب."
+      ]
+    },
+    type: ComponentType.PROCESSING,
+    iconName: 'CircuitBoard',
+    color: 'bg-emerald-500'
+  },
+  {
+    id: 'cpu',
+    name: {
+      fr: 'Processeur',
+      en: 'Processor (CPU)',
+      ar: 'المعالج'
+    },
+    action: 'Calculer',
+    description: {
+      fr: "C'est le véritable cerveau de l'ordinateur.",
+      en: "It is the real brain of the computer.",
+      ar: "إنه العقل الحقيقي للحاسوب."
+    },
+    facts: {
+      fr: [
+        "Il fait des milliards de calculs chaque seconde.",
+        "Il est tout petit mais très puissant.",
+        "Il chauffe beaucoup quand il travaille, c'est pour ça qu'il a un ventilateur.",
+        "C'est lui qui décide ce que l'écran doit afficher."
+      ],
+      en: [
+        "It does billions of calculations every second.",
+        "It gets hot when working.",
+        "It is the boss of the computer."
+      ],
+      ar: [
+        "يقوم بملايين العمليات الحسابية في الثانية.",
+        "يصبح ساخناً عند العمل.",
+        "إنه رئيس الحاسوب."
+      ]
+    },
+    type: ComponentType.PROCESSING,
+    iconName: 'Cpu',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'ram',
+    name: {
+      fr: 'Mémoire Vive (RAM)',
+      en: 'RAM Memory',
+      ar: 'الذاكرة العشوائية'
+    },
+    action: 'Mémoriser',
+    description: {
+      fr: "C'est la table de travail du processeur.",
+      en: "It's the processor's work desk.",
+      ar: "إنها طاولة عمل المعالج."
+    },
+    facts: {
+      fr: [
+        "Elle garde les informations dont l'ordinateur a besoin tout de suite.",
+        "Quand on éteint l'ordinateur, elle oublie tout !",
+        "Plus il y a de RAM, plus l'ordinateur peut faire de choses en même temps."
+      ],
+      en: [
+        "It holds info the computer needs right now.",
+        "It forgets everything when you turn off the computer.",
+        "More RAM means doing more things at once."
+      ],
+      ar: [
+        "تحفظ المعلومات التي يحتاجها الحاسوب الآن.",
+        "تنسى كل شيء عند إطفاء الحاسوب.",
+        "المزيد من الذاكرة يعني القيام بمهام أكثر."
+      ]
+    },
+    type: ComponentType.PROCESSING,
+    iconName: 'Calculator', // Placeholder for RAM stick-like icon
+    color: 'bg-green-500'
+  },
+  {
+    id: 'hdd',
+    name: {
+      fr: 'Disque Dur',
+      en: 'Hard Drive',
+      ar: 'القرص الصلب'
+    },
+    action: 'Stocker',
+    description: {
+      fr: "C'est la bibliothèque où sont rangés tous tes fichiers.",
+      en: "It's the library where all your files are kept.",
+      ar: "إنها المكتبة التي تحفظ فيها كل ملفاتك." // Corrected translation
+    },
+    facts: {
+      fr: [
+        "Il garde tes photos et tes jeux même quand l'ordinateur est éteint.",
+        "C'est comme un grand placard pour ranger des milliers de livres.",
+        "Il peut stocker beaucoup plus d'informations que la mémoire vive."
+      ],
+      en: [
+        "It keeps your data even when power is off.",
+        "Like a big closet for files.",
+        "It stores much more than RAM."
+      ],
+      ar: [
+        "يحفظ بياناتك حتى عند انقطاع الكهرباء.",
+        "مثل خزانة كبيرة للملفات.",
+        "يخزن أكثر بكثير من الذاكرة العشوائية."
+      ]
+    },
+    type: ComponentType.PROCESSING,
+    iconName: 'HardDrive',
+    color: 'bg-indigo-500'
+  },
+  {
+    id: 'gpu',
+    name: {
+      fr: 'Carte Graphique',
+      en: 'Graphics Card',
+      ar: 'بطاقة الرسومات'
+    },
+    action: 'Dessiner',
+    description: {
+      fr: "C'est l'artiste qui dessine les images à l'écran.",
+      en: "It's the artist that draws images on screen.",
+      ar: "إنه الفنان الذي يرسم الصور على الشاشة."
+    },
+    facts: {
+      fr: [
+        "Elle est très importante pour les jeux vidéo en 3D.",
+        "Elle aide le processeur à afficher de belles images.",
+        "Les ordinateurs de jeux ont souvent de très grosses cartes graphiques."
+      ],
+      en: [
+        "Very important for 3D games.",
+        "It helps show beautiful pictures.",
+        "Gaming PCs have big graphics cards."
+      ],
+      ar: [
+        "مهمة جداً للألعاب ثلاثية الأبعاد.",
+        "تساعد في عرض صور جميلة.",
+        "حواسيب الألعاب تملك بطاقات قوية."
+      ]
+    },
+    type: ComponentType.PROCESSING,
+    iconName: 'Monitor', // Using Monitor as proxy for GPU visual
+    color: 'bg-red-500'
+  },
+  {
+    id: 'psu',
+    name: {
+      fr: 'Alimentation',
+      en: 'Power Supply',
+      ar: 'مزود الطاقة'
+    },
+    action: 'Nourrir',
+    description: {
+      fr: "Elle donne l'électricité à tous les composants.",
+      en: "It gives electricity to all parts.",
+      ar: "يمد جميع الأجزاء بالكهرباء."
+    },
+    facts: {
+      fr: [
+        "Elle transforme le courant de la prise pour l'ordinateur.",
+        "Sans elle, rien ne s'allume.",
+        "Il y a beaucoup de câbles qui sortent d'elle."
+      ],
+      en: [
+        "Takes power from the wall.",
+        "Without it, nothing turns on.",
+        "Has many cables coming out."
+      ],
+      ar: [
+        "يأخذ الطاقة من الحائط.",
+        "بدونه لا يعمل شيء.",
+        "يخرج منه الكثير من الأسلاك."
+      ]
+    },
+    type: ComponentType.PROCESSING,
+    iconName: 'Battery',
+    color: 'bg-yellow-500'
+  },
+  {
+    id: 'fan',
+    name: {
+      fr: 'Ventilateur',
+      en: 'Fan',
+      ar: 'مروحة'
+    },
+    action: 'Refroidir',
+    description: {
+      fr: "Il garde l'ordinateur au frais.",
+      en: "It keeps the computer cool.",
+      ar: "تبقي الحاسوب بارداً."
+    },
+    facts: {
+      fr: [
+        "Il tourne très vite pour chasser l'air chaud.",
+        "C'est lui qui fait du bruit 'vvvvvv' quand l'ordi travaille fort.",
+        "Le processeur a toujours besoin d'un ventilateur ou d'un radiateur."
+      ],
+      en: [
+        "Spins fast to push hot air away.",
+        "Makes the humming noise.",
+        "Essential for the processor."
+      ],
+      ar: [
+        "تدور بسرعة لطرد الهواء الساخن.",
+        "تصدر صوت الطنين.",
+        "ضرورية للمعالج."
+      ]
+    },
+    type: ComponentType.PROCESSING,
+    iconName: 'Fan',
+    color: 'bg-cyan-500'
+  }
+];
+
 export const getIcon = (name: string, size: number = 24, className: string = '') => {
   const props = { size, className };
   switch (name) {
@@ -230,6 +472,16 @@ export const getIcon = (name: string, size: number = 24, className: string = '')
     case 'Speaker': return <Speaker {...props} />;
     case 'Printer': return <Printer {...props} />;
     case 'Cpu': return <Cpu {...props} />;
+    case 'Box': return <Box {...props} />;
+    case 'HardDrive': return <HardDrive {...props} />;
+    case 'CircuitBoard': return <CircuitBoard {...props} />;
+    case 'Calculator': return <Calculator {...props} />;
+    case 'Battery': return <Battery {...props} />;
+    case 'Fan': return <Fan {...props} />;
     default: return <Monitor {...props} />;
   }
+};
+
+export const getPartsForLevel = (level: ComputerLevel): ComputerPart[] => {
+  return level === 'internal' ? INTERNAL_PARTS : EXTERNAL_PARTS;
 };

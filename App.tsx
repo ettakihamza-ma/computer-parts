@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { AppView, ComputerPart, Language, UI_TEXT } from './types';
-import { COMPUTER_PARTS, getIcon } from './constants';
+import { AppView, ComputerPart, Language, UI_TEXT, ComputerLevel } from './types';
+import { EXTERNAL_PARTS, INTERNAL_PARTS, getPartsForLevel, getIcon } from './constants';
 import { playLocalAudio } from './services/audioService';
-import { ArrowLeft, ArrowRight, Monitor, Gamepad2, Volume2, Search, Brain, HelpCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Monitor, Gamepad2, Volume2, Search, Brain, HelpCircle, CircuitBoard, HardDrive } from 'lucide-react';
 import { DeskMonitor, DeskKeyboard, DeskMouse, DeskTower, DeskSpeaker, DeskPrinter } from './components/DeskParts';
+import { InternalMotherboard, InternalCPU, InternalRAM, InternalGPU, InternalPSU, InternalHDD, InternalFan } from './components/InternalParts';
 import { WordSearchGame } from './components/WordSearchGame';
 import { SaveTheRobotGame } from './components/SaveTheRobotGame';
 
@@ -16,8 +17,11 @@ interface MemoryCard {
 }
 
 export default function App() {
+  const [currentLevel, setCurrentLevel] = useState<ComputerLevel | null>(null);
   const [view, setView] = useState<AppView>(AppView.HOME);
   const [language, setLanguage] = useState<Language>('fr');
+
+  const currentParts = currentLevel ? getPartsForLevel(currentLevel) : EXTERNAL_PARTS;
 
   // Learn Mode State
   const [selectedPart, setSelectedPart] = useState<ComputerPart | null>(null);
@@ -45,6 +49,19 @@ export default function App() {
   const isRTL = language === 'ar';
   const BackIcon = isRTL ? ArrowRight : ArrowLeft;
 
+  // --- LEVEL SELECTION ---
+  const handleLevelSelect = (level: ComputerLevel) => {
+    setCurrentLevel(level);
+    setView(AppView.HOME);
+  };
+
+  const goLevelSelection = () => {
+    setCurrentLevel(null);
+    setView(AppView.HOME);
+    setMemorySolved(false); // Reset game states too
+    setFindGameScore(0);
+  };
+
   // --- AUDIO HELPER ---
   const handleSpeak = async (partId: string, type: 'name' | 'description' = 'name') => {
     setLoadingAudio(true);
@@ -70,10 +87,10 @@ export default function App() {
   };
 
   const pickNewFindTarget = (previousTargetId?: string) => {
-    let options = COMPUTER_PARTS;
+    let options = currentParts;
     // Try to pick a different one than before if possible
     if (previousTargetId) {
-      options = COMPUTER_PARTS.filter(p => p.id !== previousTargetId);
+      options = currentParts.filter(p => p.id !== previousTargetId);
     }
     const randomPart = options[Math.floor(Math.random() * options.length)];
     setFindGameTarget(randomPart);
@@ -109,7 +126,7 @@ export default function App() {
   // --- MEMORY GAME LOGIC ---
   const startMemoryGame = () => {
     // 1. Duplicate parts to make pairs
-    const deck = [...COMPUTER_PARTS, ...COMPUTER_PARTS];
+    const deck = [...currentParts, ...currentParts];
 
     // 2. Shuffle (Fisher-Yates)
     for (let i = deck.length - 1; i > 0; i--) {
@@ -137,7 +154,7 @@ export default function App() {
     if (isProcessingMatch || memoryCards[index].isFlipped || memoryCards[index].isMatched) return;
 
     // 1. Play Sound of the object immediately on click
-    const part = COMPUTER_PARTS.find(p => p.id === memoryCards[index].partId);
+    const part = currentParts.find(p => p.id === memoryCards[index].partId);
     if (part) {
       handleSpeak(part.id, 'name');
     }
@@ -205,9 +222,8 @@ export default function App() {
 
   // --- RENDERERS ---
 
-  const renderHome = () => (
-    <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-center space-y-6 animate-fade-in-up bg-gradient-to-b from-blue-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
-
+  const renderLevelSelection = () => (
+    <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-center space-y-8 animate-fade-in-up bg-gradient-to-br from-indigo-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Language Selector */}
       <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} flex gap-3 bg-white/60 p-2 rounded-2xl backdrop-blur-sm shadow-sm z-10 transition-all duration-300`}>
         <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇫🇷</span><span className="text-xs font-bold text-gray-500">FR</span></button>
@@ -215,7 +231,87 @@ export default function App() {
         <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
       </div>
 
+      <h1 className="text-5xl md:text-6xl font-bold text-kid-blue mb-4 drop-shadow-md tracking-wider font-sans mt-12">{t.title}</h1>
+      <p className="text-2xl text-gray-600 max-w-lg font-sans leading-relaxed bg-white/50 p-4 rounded-xl mb-8">
+        {language === 'fr' ? "Choisis ton niveau !" : language === 'en' ? "Choose your level!" : "اختر مستواك!"}
+      </p>
+
+      <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl justify-center">
+        {/* Level 1: External */}
+        <button
+          onClick={() => handleLevelSelect('external')}
+          className="group relative flex-1 bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-8 border-blue-200"
+        >
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-6 py-2 rounded-full font-bold shadow-lg">
+            {language === 'fr' ? "Débutant" : language === 'en' ? "Beginner" : "مبتدئ"}
+          </div>
+          <div className="bg-blue-50 rounded-full p-8 mb-6 inline-block group-hover:bg-blue-100 transition-colors">
+            <Monitor size={80} className="text-blue-500" />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2 font-sans">
+            {t.desk}
+          </h2>
+          <p className="text-gray-500 font-sans">
+            {language === 'fr' ? "Découvre l'ordinateur et ses amis (Clavier, Souris...)" :
+              language === 'en' ? "Discover the computer and friends (Keyboard, Mouse...)" :
+                "اكتشف الحاسوب وأصدقائه (لوحة المفاتيح، الفأرة...)"}
+          </p>
+        </button>
+
+        {/* Level 2: Internal */}
+        <button
+          onClick={() => handleLevelSelect('internal')}
+          className="group relative flex-1 bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-8 border-purple-200"
+        >
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-purple-500 text-white px-6 py-2 rounded-full font-bold shadow-lg">
+            {language === 'fr' ? "Expert" : language === 'en' ? "Expert" : "خبير"}
+          </div>
+          <div className="bg-purple-50 rounded-full p-8 mb-6 inline-block group-hover:bg-purple-100 transition-colors">
+            <CircuitBoard size={80} className="text-purple-500" />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2 font-sans">
+            {language === 'fr' ? "Dans la machine" : language === 'en' ? "Inside the Machine" : "داخل الآلة"}
+          </h2>
+          <p className="text-gray-500 font-sans">
+            {language === 'fr' ? "Explore l'unité centrale (Processeur, Carte Mère...)" :
+              language === 'en' ? "Explore inside the case (CPU, Motherboard...)" :
+                "اكتشف ما بداخل الوحدة المركزية (المعالج، اللوحة الأم...)"}
+          </p>
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderHome = () => (
+    <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-center space-y-6 animate-fade-in-up bg-gradient-to-b from-blue-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
+
+      {/* Back to Level Selection */}
+      <button
+        onClick={goLevelSelection}
+        className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} p-3 bg-white/80 rounded-full shadow hover:bg-white z-20 flex items-center gap-2`}
+        dir="ltr"
+      >
+        <BackIcon size={24} className="text-gray-600" />
+        <span className="font-bold text-gray-600 hidden sm:block">
+          {language === 'fr' ? "Changer de niveau" : language === 'en' ? "Change Level" : "تغيير المستوى"}
+        </span>
+      </button>
+
+      {/* Language Selector (Hidden here if moved to Level Selection, or keep it) - Keeping it simple, remove duplicates if preferred, but keeping for now */}
+      {/* Small Language Toggle just in case */}
+      <div className={`absolute top-4 ${isRTL ? 'left-auto right-auto' : 'right-4'} flex gap-2 bg-white/60 p-1.5 rounded-xl backdrop-blur-sm shadow-sm z-10`}>
+        {/* Simplified flags */}
+        <button onClick={() => setLanguage('fr')} className={`p-1 rounded-lg ${language === 'fr' ? 'bg-white shadow' : 'opacity-50'}`}><span className="text-2xl">🇫🇷</span></button>
+        <button onClick={() => setLanguage('en')} className={`p-1 rounded-lg ${language === 'en' ? 'bg-white shadow' : 'opacity-50'}`}><span className="text-2xl">🇺🇸</span></button>
+        <button onClick={() => setLanguage('ar')} className={`p-1 rounded-lg ${language === 'ar' ? 'bg-white shadow' : 'opacity-50'}`}><span className="text-2xl">🇲🇦</span></button>
+      </div>
+
       <h1 className="text-5xl md:text-6xl font-bold text-kid-blue mb-2 drop-shadow-md tracking-wider font-sans mt-12">{t.title}</h1>
+      <div className="bg-white/60 px-6 py-2 rounded-full mb-4">
+        <span className="text-xl font-bold text-kid-blue/80 uppercase tracking-widest">
+          {currentLevel === 'internal' ? (language === 'fr' ? 'Niveau Expert' : 'Expert Level') : (language === 'fr' ? 'Niveau Débutant' : 'Beginner Level')}
+        </span>
+      </div>
       <p className="text-2xl text-gray-600 max-w-lg font-sans leading-relaxed bg-white/50 p-4 rounded-xl">{t.subtitle}</p>
 
       <div className="flex flex-col sm:flex-row gap-6 mt-8 mb-8">
@@ -231,8 +327,14 @@ export default function App() {
           onClick={() => setView(AppView.DESK)}
           className="bg-yellow-400 hover:bg-yellow-300 text-white p-8 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-64 border-b-8 border-yellow-600 group"
         >
-          <Monitor size={64} className="mb-4 group-hover:scale-110 transition-transform text-white" />
-          <span className="text-3xl font-bold font-sans">{t.desk}</span>
+          {currentLevel === 'internal' ? (
+            <CircuitBoard size={64} className="mb-4 group-hover:scale-110 transition-transform text-white" />
+          ) : (
+            <Monitor size={64} className="mb-4 group-hover:scale-110 transition-transform text-white" />
+          )}
+          <span className="text-3xl font-bold font-sans">
+            {currentLevel === 'internal' ? (language === 'fr' ? "Intérieur" : language === 'en' ? "Inside" : "الداخل") : t.desk}
+          </span>
         </button>
 
         <button
@@ -360,7 +462,7 @@ export default function App() {
           <h2 className="text-4xl font-bold text-gray-800 font-sans">{t.touchObj}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto pt-8 mb-8">
-          {COMPUTER_PARTS.map((part) => (
+          {currentParts.map((part) => (
             <div key={part.id} onClick={() => handlePartClick(part)} className={`${part.color} p-6 rounded-3xl shadow-lg cursor-pointer border-b-8 border-black/10 flex flex-col items-center justify-center h-64 ${animatingId === part.id ? 'animate-pop-bounce ring-4 ring-white ring-offset-4 ring-offset-blue-50' : 'transform transition hover:scale-105 hover:rotate-1'}`}>
               <div className="bg-white/20 p-6 rounded-full mb-4">{getIcon(part.iconName, 64, "text-white")}</div>
               <span className="text-3xl font-bold text-white tracking-wide font-sans">{part.name[language]}</span>
@@ -409,7 +511,7 @@ export default function App() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          {COMPUTER_PARTS.map((part) => (
+          {currentParts.map((part) => (
             <button
               key={part.id}
               onClick={() => handleFindAnswer(part.id)}
@@ -461,7 +563,7 @@ export default function App() {
 
         <div className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl w-full mb-8">
           {memoryCards.map((card, index) => {
-            const part = COMPUTER_PARTS.find(p => p.id === card.partId);
+            const part = currentParts.find(p => p.id === card.partId);
             if (!part) return null;
 
             return (
@@ -532,7 +634,7 @@ export default function App() {
           {/* Monitor */}
           <DeskMonitor
             onClick={() => {
-              const part = COMPUTER_PARTS.find(p => p.id === 'monitor');
+              const part = currentParts.find(p => p.id === 'monitor');
               if (part) { setSelectedPart(part); handleSpeak(part.id, 'name'); }
             }}
             style={{ top: '15%', left: '35%', width: '30%', height: '45%' }}
@@ -541,7 +643,7 @@ export default function App() {
           {/* Tower (Central Unit) */}
           <DeskTower
             onClick={() => {
-              const part = COMPUTER_PARTS.find(p => p.id === 'tower');
+              const part = currentParts.find(p => p.id === 'tower');
               if (part) { setSelectedPart(part); handleSpeak(part.id, 'name'); }
             }}
             style={{ top: '35%', left: '4%', width: '15%', height: '50%' }}
@@ -550,7 +652,7 @@ export default function App() {
           {/* Keyboard */}
           <DeskKeyboard
             onClick={() => {
-              const part = COMPUTER_PARTS.find(p => p.id === 'keyboard');
+              const part = currentParts.find(p => p.id === 'keyboard');
               if (part) { setSelectedPart(part); handleSpeak(part.id, 'name'); }
             }}
             style={{ top: '65%', left: '35%', width: '30%', height: '15%' }}
@@ -559,7 +661,7 @@ export default function App() {
           {/* Mouse */}
           <DeskMouse
             onClick={() => {
-              const part = COMPUTER_PARTS.find(p => p.id === 'mouse');
+              const part = currentParts.find(p => p.id === 'mouse');
               if (part) { setSelectedPart(part); handleSpeak(part.id, 'name'); }
             }}
             style={{ top: '68%', left: '68%', width: '5%', height: '10%' }}
@@ -568,14 +670,14 @@ export default function App() {
           {/* Speakers */}
           <DeskSpeaker
             onClick={() => {
-              const part = COMPUTER_PARTS.find(p => p.id === 'speakers');
+              const part = currentParts.find(p => p.id === 'speakers');
               if (part) { setSelectedPart(part); handleSpeak(part.id, 'name'); }
             }}
             style={{ top: '40%', left: '25%', width: '8%', height: '20%' }}
           />
           <DeskSpeaker
             onClick={() => {
-              const part = COMPUTER_PARTS.find(p => p.id === 'speakers');
+              const part = currentParts.find(p => p.id === 'speakers');
               if (part) { setSelectedPart(part); handleSpeak(part.id, 'name'); }
             }}
             style={{ top: '40%', left: '67%', width: '8%', height: '20%' }}
@@ -584,7 +686,7 @@ export default function App() {
           {/* Printer */}
           <DeskPrinter
             onClick={() => {
-              const part = COMPUTER_PARTS.find(p => p.id === 'printer');
+              const part = currentParts.find(p => p.id === 'printer');
               if (part) { setSelectedPart(part); handleSpeak(part.id, 'name'); }
             }}
             style={{ top: '45%', left: '80%', width: '15%', height: '25%' }}
@@ -605,27 +707,109 @@ export default function App() {
     );
   };
 
+  const renderInternalView = () => (
+    <div className="min-h-screen p-4 flex flex-col items-center justify-center bg-gray-900 animate-fade-in-up" dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Back Button */}
+      <button
+        onClick={goHome}
+        className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} p-3 bg-white/20 text-white rounded-full shadow hover:bg-white/30 z-20`}
+        dir="ltr"
+      >
+        <BackIcon size={32} />
+      </button>
+
+      <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-sans">
+        {language === 'fr' ? "L'Unité Centrale" : language === 'en' ? "Central Unit" : "الوحدة المركزية"}
+      </h2>
+
+      <div className="relative w-full max-w-5xl aspect-video bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-700">
+        {/* Case Background */}
+        <div className="absolute inset-0 opacity-20"
+          style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #333 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+        </div>
+
+        {/* --- Components --- */}
+
+        {/* Motherboard (Background for components) */}
+        <InternalMotherboard
+          onClick={() => { const p = currentParts.find(x => x.id === 'motherboard'); if (p) { setSelectedPart(p); handleSpeak(p.id, 'name'); } }}
+          style={{ top: '5%', left: '5%', width: '90%', height: '90%' }}
+        />
+
+        {/* CPU */}
+        <InternalCPU
+          onClick={() => { const p = currentParts.find(x => x.id === 'cpu'); if (p) { setSelectedPart(p); handleSpeak(p.id, 'name'); } }}
+          style={{ top: '40%', left: '42%', width: '16%', height: '22%' }}
+        />
+
+        {/* Fan (Offset to show CPU partly) */}
+        <InternalFan
+          onClick={() => { const p = currentParts.find(x => x.id === 'fan'); if (p) { setSelectedPart(p); handleSpeak(p.id, 'name'); } }}
+          style={{ top: '36%', left: '44%', width: '16%', height: '22%', zIndex: 30 }}
+        />
+
+        {/* RAM */}
+        <InternalRAM
+          onClick={() => { const p = currentParts.find(x => x.id === 'ram'); if (p) { setSelectedPart(p); handleSpeak(p.id, 'name'); } }}
+          style={{ top: '15%', left: '65%', width: '10%', height: '40%' }}
+        />
+
+        {/* GPU */}
+        <InternalGPU
+          onClick={() => { const p = currentParts.find(x => x.id === 'gpu'); if (p) { setSelectedPart(p); handleSpeak(p.id, 'name'); } }}
+          style={{ top: '65%', left: '15%', width: '60%', height: '25%' }}
+        />
+
+        {/* PSU */}
+        <InternalPSU
+          onClick={() => { const p = currentParts.find(x => x.id === 'psu'); if (p) { setSelectedPart(p); handleSpeak(p.id, 'name'); } }}
+          style={{ top: '70%', left: '80%', width: '15%', height: '25%' }}
+        />
+
+        {/* HDD */}
+        <InternalHDD
+          onClick={() => { const p = currentParts.find(x => x.id === 'hdd'); if (p) { setSelectedPart(p); handleSpeak(p.id, 'name'); } }}
+          style={{ top: '10%', left: '80%', width: '15%', height: '25%' }}
+        />
+
+        {/* Label Display (Overlay) */}
+        {selectedPart && (
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md px-8 py-4 rounded-full shadow-2xl animate-bounce-in border-4 border-emerald-500 z-50">
+            <span className={`text-4xl font-bold text-white`}>
+              {selectedPart.name[language]}
+            </span>
+          </div>
+        )}
+      </div>
+      <p className="mt-8 text-xl text-gray-400 font-sans animate-pulse">{t.touchObj}</p>
+    </div>
+  );
+
   return (
     <div className="min-h-screen font-sans text-gray-900 bg-[#f0f9ff]">
-      {view === AppView.HOME && renderHome()}
-      {view === AppView.LEARN && renderLearn()}
-      {view === AppView.DESK && renderDesk()}
-      {view === AppView.PLAY_MENU && renderPlayMenu()}
-      {view === AppView.GAME_FIND && renderFindGame()}
-      {view === AppView.GAME_MEMORY && renderMemoryGame()}
-      {view === AppView.GAME_WORDSEARCH && (
-        <WordSearchGame
-          parts={COMPUTER_PARTS}
-          language={language}
-          onBack={goPlayMenu}
-        />
-      )}
-      {view === AppView.GAME_ROBOT && (
-        <SaveTheRobotGame
-          parts={COMPUTER_PARTS}
-          language={language}
-          onBack={goPlayMenu}
-        />
+      {!currentLevel ? renderLevelSelection() : (
+        <>
+          {view === AppView.HOME && renderHome()}
+          {view === AppView.LEARN && renderLearn()}
+          {view === AppView.DESK && (currentLevel === 'internal' ? renderInternalView() : renderDesk())}
+          {view === AppView.PLAY_MENU && renderPlayMenu()}
+          {view === AppView.GAME_FIND && renderFindGame()}
+          {view === AppView.GAME_MEMORY && renderMemoryGame()}
+          {view === AppView.GAME_WORDSEARCH && (
+            <WordSearchGame
+              parts={currentParts}
+              language={language}
+              onBack={goPlayMenu}
+            />
+          )}
+          {view === AppView.GAME_ROBOT && (
+            <SaveTheRobotGame
+              parts={currentParts}
+              language={language}
+              onBack={goPlayMenu}
+            />
+          )}
+        </>
       )}
 
       {/* Footer */}
