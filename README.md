@@ -1,10 +1,10 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="800" alt="Mon Bureau - Application Preview" src="./public/app_banner.png" />
 </div>
 
-# 🖥️ Mon Bureau - Computer Device CP
+# 🖥️ Mon Bureau - Computer Device
 
-**Mon Bureau** est une application web éducative conçue pour les élèves du primaire (CP). Elle permet de découvrir et d'apprendre les noms des composants essentiels d'un ordinateur de manière interactive et ludique.
+**Mon Bureau** est une application web éducative conçue pour les élèves du primaire. Elle permet de découvrir et d'apprendre les noms des composants essentiels d'un ordinateur de manière interactive et ludique.
 
 🌍 **Multilingue** : Entièrement disponible en **Français 🇫🇷**, **Anglais 🇺🇸** et **Arabe 🇲🇦**.
 
