@@ -60,7 +60,7 @@ Une exploration spatiale d'un bureau virtuel ! Cliquez sur les équipements (éc
    ```
 
 4. **Accéder à l'application**
-   Ouvrez votre navigateur sur `http://localhost:5173`.
+   Ouvrez votre navigateur sur `http://localhost:3000`.
 
 ---
 
