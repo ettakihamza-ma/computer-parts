@@ -231,7 +231,7 @@ export default function App() {
         <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
       </div>
 
-      <h1 className="text-5xl md:text-6xl font-bold text-kid-blue mb-4 drop-shadow-md tracking-wider font-sans mt-12">{t.title}</h1>
+      <h1 className="text-5xl md:text-6xl font-bold text-kid-blue mb-4 drop-shadow-md tracking-wider font-sans mt-32 md:mt-12">{t.title}</h1>
       <p className="text-2xl text-gray-600 max-w-lg font-sans leading-relaxed bg-white/50 p-4 rounded-xl mb-8">
         {language === 'fr' ? "Choisis ton niveau !" : language === 'en' ? "Choose your level!" : "اختر مستواك!"}
       </p>
@@ -301,9 +301,9 @@ export default function App() {
       {/* Small Language Toggle just in case */}
       <div className={`absolute top-4 ${isRTL ? 'left-auto right-auto' : 'right-4'} flex gap-2 bg-white/60 p-1.5 rounded-xl backdrop-blur-sm shadow-sm z-10`}>
         {/* Simplified flags */}
-        <button onClick={() => setLanguage('fr')} className={`p-1 rounded-lg ${language === 'fr' ? 'bg-white shadow' : 'opacity-50'}`}><span className="text-2xl">🇫🇷</span></button>
-        <button onClick={() => setLanguage('en')} className={`p-1 rounded-lg ${language === 'en' ? 'bg-white shadow' : 'opacity-50'}`}><span className="text-2xl">🇺🇸</span></button>
-        <button onClick={() => setLanguage('ar')} className={`p-1 rounded-lg ${language === 'ar' ? 'bg-white shadow' : 'opacity-50'}`}><span className="text-2xl">🇲🇦</span></button>
+        <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇫🇷</span><span className="text-xs font-bold text-gray-500">FR</span></button>
+        <button onClick={() => setLanguage('en')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'en' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇺🇸</span><span className="text-xs font-bold text-gray-500">EN</span></button>
+        <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
       </div>
 
       <h1 className="text-5xl md:text-6xl font-bold text-kid-blue mb-2 drop-shadow-md tracking-wider font-sans mt-12">{t.title}</h1>
