@@ -1,5 +1,5 @@
 <div align="center">
-<img width="800" alt="Mon Bureau - Application Preview" src="./public/app_banner.png" />
+<img width="800" alt="Explorateur Numérique - Application Preview" src="./public/app_banner.png" />
 </div>
 
 # 🖥️ Explorateur Numérique - Computer Device
