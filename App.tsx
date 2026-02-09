@@ -223,15 +223,15 @@ export default function App() {
   // --- RENDERERS ---
 
   const renderLevelSelection = () => (
-    <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-center space-y-8 animate-fade-in-up bg-gradient-to-br from-indigo-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="flex flex-col items-center min-h-screen p-4 text-center animate-fade-in-up bg-gradient-to-br from-indigo-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Language Selector */}
-      <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} flex gap-3 bg-white/60 p-2 rounded-2xl backdrop-blur-sm shadow-sm z-10 transition-all duration-300`}>
+      <div className="flex gap-3 bg-white/60 p-2 rounded-2xl backdrop-blur-sm shadow-sm transition-all duration-300 mt-4 mb-6">
         <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇫🇷</span><span className="text-xs font-bold text-gray-500">FR</span></button>
         <button onClick={() => setLanguage('en')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'en' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇺🇸</span><span className="text-xs font-bold text-gray-500">EN</span></button>
         <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
       </div>
 
-      <h1 className="text-5xl md:text-6xl font-bold text-kid-blue mb-4 drop-shadow-md tracking-wider font-sans mt-32 md:mt-12">{t.title}</h1>
+      <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-kid-blue mb-4 drop-shadow-md tracking-wider font-sans">{t.title}</h1>
       <p className="text-2xl text-gray-600 max-w-lg font-sans leading-relaxed bg-white/50 p-4 rounded-xl mb-8">
         {language === 'fr' ? "Choisis ton niveau !" : language === 'en' ? "Choose your level!" : "اختر مستواك!"}
       </p>
@@ -283,30 +283,29 @@ export default function App() {
   );
 
   const renderHome = () => (
-    <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-center space-y-6 animate-fade-in-up bg-gradient-to-b from-blue-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="flex flex-col items-center min-h-screen p-4 text-center animate-fade-in-up bg-gradient-to-b from-blue-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
 
-      {/* Back to Level Selection */}
-      <button
-        onClick={goLevelSelection}
-        className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} p-3 bg-white/80 rounded-full shadow hover:bg-white z-20 flex items-center gap-2`}
-        dir="ltr"
-      >
-        <BackIcon size={24} className="text-gray-600" />
-        <span className="font-bold text-gray-600 hidden sm:block">
-          {language === 'fr' ? "Changer de niveau" : language === 'en' ? "Change Level" : "تغيير المستوى"}
-        </span>
-      </button>
+      {/* Top Bar: Back + Flags */}
+      <div className="flex items-center justify-between w-full mt-2 mb-4">
+        <button
+          onClick={goLevelSelection}
+          className="p-3 bg-white/80 rounded-full shadow hover:bg-white flex items-center gap-2"
+          dir="ltr"
+        >
+          <BackIcon size={24} className="text-gray-600" />
+          <span className="font-bold text-gray-600 hidden sm:block">
+            {language === 'fr' ? "Changer de niveau" : language === 'en' ? "Change Level" : "تغيير المستوى"}
+          </span>
+        </button>
 
-      {/* Language Selector (Hidden here if moved to Level Selection, or keep it) - Keeping it simple, remove duplicates if preferred, but keeping for now */}
-      {/* Small Language Toggle just in case */}
-      <div className={`absolute top-4 ${isRTL ? 'left-auto right-auto' : 'right-4'} flex gap-2 bg-white/60 p-1.5 rounded-xl backdrop-blur-sm shadow-sm z-10`}>
-        {/* Simplified flags */}
-        <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇫🇷</span><span className="text-xs font-bold text-gray-500">FR</span></button>
-        <button onClick={() => setLanguage('en')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'en' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇺🇸</span><span className="text-xs font-bold text-gray-500">EN</span></button>
-        <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
+        <div className="flex gap-3 bg-white/60 p-2 rounded-2xl backdrop-blur-sm shadow-sm">
+          <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇫🇷</span><span className="text-xs font-bold text-gray-500">FR</span></button>
+          <button onClick={() => setLanguage('en')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'en' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇺🇸</span><span className="text-xs font-bold text-gray-500">EN</span></button>
+          <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
+        </div>
       </div>
 
-      <h1 className="text-5xl md:text-6xl font-bold text-kid-blue mb-2 drop-shadow-md tracking-wider font-sans mt-12">{t.title}</h1>
+      <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-kid-blue mb-2 drop-shadow-md tracking-wider font-sans">{t.title}</h1>
       <div className="bg-white/60 px-6 py-2 rounded-full mb-4">
         <span className="text-xl font-bold text-kid-blue/80 uppercase tracking-widest">
           {currentLevel === 'internal' ? (language === 'fr' ? 'Niveau Expert' : 'Expert Level') : (language === 'fr' ? 'Niveau Débutant' : 'Beginner Level')}
