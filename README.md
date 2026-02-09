@@ -69,6 +69,18 @@ Ce projet est open-source. N'hésitez pas à proposer des améliorations, des no
 
 ---
 
+## 📝 Historique des Versions
+
+### Version 1.1 (09/02/2026)
+**Améliorations du support de la langue arabe :**
+- ✅ Ajout des lettres arabes manquantes (ة, أ, ئ, etc.) dans les jeux
+- ✅ Correction de l'affichage RTL (droite à gauche) pour les mots arabes
+- ✅ Correction du bug de normalisation des caractères arabes
+- ✅ Amélioration du jeu "Mots Mêlés" : possibilité de cliquer les lettres dans n'importe quel ordre
+- ✅ Séparation de la logique de normalisation pour les scripts arabes et latins
+
+---
+
 ## ❤️ Crédits
 Développé avec passion par **Hamza Ettaki**.  
 Retrouvez-moi sur LinkedIn : [linkedin.com/in/ettaki/](https://www.linkedin.com/in/ettaki/)
