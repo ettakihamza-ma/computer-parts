@@ -18,7 +18,7 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
     const [win, setWin] = useState(false);
 
     const alphabet = language === 'ar'
-        ? 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('')
+        ? 'ابتثجحخدذرزسشصضطظعغفقكلمنهويأإآةؤئ'.split('')
         : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
     useEffect(() => {
@@ -26,11 +26,17 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
     }, [language]);
 
     const normalize = (str: string) => {
-        return str
-            .normalize('NFD') // Decompose accents
-            .replace(/[\u0300-\u036f]/g, '') // Remove accents
-            .replace(/[^a-zA-Z\u0600-\u06FF]/g, '')
-            .toUpperCase();
+        if (language === 'ar') {
+            // For Arabic: just remove spaces and non-Arabic characters
+            return str.replace(/[^\u0600-\u06FF]/g, '');
+        } else {
+            // For French/English: remove accents and keep only letters
+            return str
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-zA-Z]/g, '')
+                .toUpperCase();
+        }
     };
 
     const startNewGame = () => {
@@ -147,7 +153,7 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
                 {renderRobotStatus()}
 
                 {/* Word Display */}
-                <div className="flex flex-wrap gap-2 justify-center mb-8">
+                <div className="flex flex-wrap gap-2 justify-center mb-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                     {targetWord.split('').map((char, index) => (
                         <div key={index} className="w-10 h-12 md:w-14 md:h-16 border-b-4 border-gray-400 flex items-center justify-center text-3xl font-bold text-gray-800">
                             {guessedLetters.includes(char) || gameOver ? char : ''}

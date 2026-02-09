@@ -21,15 +21,21 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
 
     // Normalize words for the grid (remove accents, spaces, uppercase)
     const normalize = (str: string) => {
-        return str
-            .normalize('NFD') // Decompose accents
-            .replace(/[\u0300-\u036f]/g, '') // Remove accents
-            .replace(/[^a-zA-Z\u0600-\u06FF]/g, '') // Keep letters (including Arabic)
-            .toUpperCase();
+        if (language === 'ar') {
+            // For Arabic: just remove spaces and non-Arabic characters
+            return str.replace(/[^\u0600-\u06FF]/g, '');
+        } else {
+            // For French/English: remove accents and keep only letters
+            return str
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-zA-Z]/g, '')
+                .toUpperCase();
+        }
     };
 
     const alphabet = language === 'ar'
-        ? 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'
+        ? 'ابتثجحخدذرزسشصضطظعغفقكلمنهويأإآةؤئ'
         : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     useEffect(() => {
@@ -118,26 +124,41 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
     };
 
     const checkSelection = (selection: { r: number; c: number }[]) => {
-        // Construct word from selection
-        // This is a naive check: we check if the selected letters form any of the words
-        // regardless of order, which might be too loose, but good for kids.
-        // BETTER: Check if the *sequence* matches.
+        if (selection.length < 2) return;
 
-        // Let's implement a "start and end" click logic or just "click letters in order".
-        // For simplicity: If the selected letters match a word exactly composed of those cells.
+        // Sort selection by position to allow clicking in any order
+        // First check if it's a horizontal line (all same row)
+        const allSameRow = selection.every(cell => cell.r === selection[0].r);
+        // Or vertical line (all same column)
+        const allSameCol = selection.every(cell => cell.c === selection[0].c);
 
-        const selectedString = selection.map(pos => grid[pos.r][pos.c]).join('');
-        // Try to find if this string matches any word
+        if (!allSameRow && !allSameCol) {
+            // Not a valid line - don't check yet, user might still be selecting
+            return;
+        }
 
-        // Actually, for CP, let's make it robust:
-        // They click sequential cells. We check if the formed string matches.
-        // We need to sort selected cells by position? 
-        // Let's assume they click in order.
+        // Sort by column (horizontal) or row (vertical)
+        const sortedSelection = [...selection].sort((a, b) => {
+            if (allSameRow) return a.c - b.c; // Sort by column
+            return a.r - b.r; // Sort by row
+        });
 
-        const potentialWord = selectedString;
+        // Check if cells are consecutive
+        let isConsecutive = true;
+        for (let i = 1; i < sortedSelection.length; i++) {
+            const prev = sortedSelection[i - 1];
+            const curr = sortedSelection[i];
+            if (allSameRow && curr.c - prev.c !== 1) isConsecutive = false;
+            if (allSameCol && curr.r - prev.r !== 1) isConsecutive = false;
+        }
+
+        if (!isConsecutive) return;
+
+        // Build word from sorted selection
+        const selectedString = sortedSelection.map(pos => grid[pos.r][pos.c]).join('');
         const reverseWord = selectedString.split('').reverse().join('');
 
-        const match = words.find(w => !w.found && (w.word === potentialWord || w.word === reverseWord));
+        const match = words.find(w => !w.found && (w.word === selectedString || w.word === reverseWord));
 
         if (match) {
             // Word found!
@@ -146,7 +167,7 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
             setFoundCells([...foundCells, ...selection]);
             setSelectedCells([]); // Clear selection
             setScore(prev => prev + 1);
-            playLocalAudio('good_answer', language); // Or part name
+            playLocalAudio('good_answer', language);
 
             // Play part audio
             playLocalAudio(match.partId, language);
