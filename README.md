@@ -2,9 +2,9 @@
 <img width="800" alt="Mon Bureau - Application Preview" src="./public/app_banner.png" />
 </div>
 
-# 🖥️ Mon Bureau - Computer Device
+# 🖥️ Explorateur Numérique - Computer Device
 
-**Mon Bureau** est une application web éducative conçue pour les élèves du primaire. Elle permet de découvrir et d'apprendre les noms des composants essentiels d'un ordinateur de manière interactive et ludique.
+**Explorateur Numérique** est une application web éducative conçue pour les élèves du primaire. Elle permet de découvrir et d'apprendre les noms des composants essentiels d'un ordinateur de manière interactive et ludique.
 
 🌍 **Multilingue** : Entièrement disponible en **Français 🇫🇷**, **Anglais 🇺🇸** et **Arabe 🇲🇦**.
 

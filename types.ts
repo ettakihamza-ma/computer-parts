@@ -52,7 +52,7 @@ export interface QuizQuestion {
 
 export const UI_TEXT = {
   fr: {
-    title: "L'Ordi des Petits",
+    title: "Explorateur Numérique",
     subtitle: "Découvre les secrets de l'ordinateur !",
     learn: "Apprendre",
     play: "Jouer",
@@ -70,7 +70,7 @@ export const UI_TEXT = {
     desk: "Mon Bureau"
   },
   en: {
-    title: "Little Computer",
+    title: "Digital Explorer",
     subtitle: "Discover computer secrets!",
     learn: "Learn",
     play: "Play",
@@ -88,7 +88,7 @@ export const UI_TEXT = {
     desk: "My Desk"
   },
   ar: {
-    title: "حاسوب الصغار",
+    title: "المستكشف الرقمي",
     subtitle: "اكتشف أسرار الحاسوب!",
     learn: "تَعلَّم",
     play: "الْعَب",
