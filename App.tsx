@@ -8,6 +8,52 @@ import { InternalMotherboard, InternalCPU, InternalRAM, InternalGPU, InternalPSU
 import { WordSearchGame } from './components/WordSearchGame';
 import { SaveTheRobotGame } from './components/SaveTheRobotGame';
 
+// SVG Flag Components
+const FlagFR = () => (
+  <svg width="28" height="20" viewBox="0 0 30 20" className="rounded-sm shadow-sm">
+    <rect width="10" height="20" fill="#002395" />
+    <rect x="10" width="10" height="20" fill="#FFFFFF" />
+    <rect x="20" width="10" height="20" fill="#ED2939" />
+  </svg>
+);
+
+const FlagUS = () => (
+  <svg width="28" height="20" viewBox="0 0 30 20" className="rounded-sm shadow-sm">
+    <rect width="30" height="20" fill="#B22234" />
+    <rect y="1.54" width="30" height="1.54" fill="white" />
+    <rect y="4.62" width="30" height="1.54" fill="white" />
+    <rect y="7.69" width="30" height="1.54" fill="white" />
+    <rect y="10.77" width="30" height="1.54" fill="white" />
+    <rect y="13.85" width="30" height="1.54" fill="white" />
+    <rect y="16.92" width="30" height="1.54" fill="white" />
+    <rect width="12" height="10.77" fill="#3C3B6E" />
+  </svg>
+);
+
+const FlagMA = () => (
+  <svg width="28" height="20" viewBox="0 0 30 20" className="rounded-sm shadow-sm">
+    <rect width="30" height="20" fill="#C1272D" />
+    <polygon points="15,5 16.5,9.5 21,9.5 17.5,12.5 18.5,17 15,14 11.5,17 12.5,12.5 9,9.5 13.5,9.5" fill="none" stroke="#006233" strokeWidth="1" />
+  </svg>
+);
+
+const LanguageSelector = ({ language, setLanguage, className = '' }: { language: Language; setLanguage: (l: Language) => void; className?: string }) => (
+  <div className={`flex gap-3 bg-white/60 p-2 rounded-2xl backdrop-blur-sm shadow-sm transition-all duration-300 ${className}`}>
+    <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-16 gap-1 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}>
+      <FlagFR />
+      <span className="text-xs font-bold text-gray-500">FR</span>
+    </button>
+    <button onClick={() => setLanguage('en')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-16 gap-1 ${language === 'en' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}>
+      <FlagUS />
+      <span className="text-xs font-bold text-gray-500">EN</span>
+    </button>
+    <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-16 gap-1 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}>
+      <FlagMA />
+      <span className="text-xs font-bold text-gray-500">ع</span>
+    </button>
+  </div>
+);
+
 // Interface for Memory Card
 interface MemoryCard {
   id: string; // unique instance id
@@ -225,11 +271,7 @@ export default function App() {
   const renderLevelSelection = () => (
     <div className="flex flex-col items-center min-h-screen p-4 text-center animate-fade-in-up bg-gradient-to-br from-indigo-50 to-blue-100" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Language Selector */}
-      <div className="flex gap-3 bg-white/60 p-2 rounded-2xl backdrop-blur-sm shadow-sm transition-all duration-300 mt-4 mb-6">
-        <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇫🇷</span><span className="text-xs font-bold text-gray-500">FR</span></button>
-        <button onClick={() => setLanguage('en')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'en' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇺🇸</span><span className="text-xs font-bold text-gray-500">EN</span></button>
-        <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
-      </div>
+      <LanguageSelector language={language} setLanguage={setLanguage} className="mt-4 mb-6" />
 
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-kid-blue mb-4 drop-shadow-md tracking-wider font-sans">{t.title}</h1>
       <p className="text-2xl text-gray-600 max-w-lg font-sans leading-relaxed bg-white/50 p-4 rounded-xl mb-8">
@@ -298,11 +340,7 @@ export default function App() {
           </span>
         </button>
 
-        <div className="flex gap-3 bg-white/60 p-2 rounded-2xl backdrop-blur-sm shadow-sm">
-          <button onClick={() => setLanguage('fr')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'fr' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇫🇷</span><span className="text-xs font-bold text-gray-500">FR</span></button>
-          <button onClick={() => setLanguage('en')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'en' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇺🇸</span><span className="text-xs font-bold text-gray-500">EN</span></button>
-          <button onClick={() => setLanguage('ar')} className={`p-2 rounded-xl transition-all transform hover:scale-110 flex flex-col items-center justify-center w-14 ${language === 'ar' ? 'bg-white shadow-md ring-2 ring-kid-blue scale-110' : 'opacity-60 hover:opacity-100'}`}><span className="text-2xl">🇲🇦</span><span className="text-lg font-bold text-gray-500 font-sans leading-none mt-1">ع</span></button>
-        </div>
+        <LanguageSelector language={language} setLanguage={setLanguage} />
       </div>
 
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-kid-blue mb-2 drop-shadow-md tracking-wider font-sans">{t.title}</h1>
