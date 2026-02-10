@@ -1,5 +1,5 @@
 import { ComputerPart, ComponentType, ComputerLevel } from './types';
-import { Monitor, Keyboard, Mouse, Speaker, Printer, Cpu, HardDrive, CircuitBoard, Calculator, Battery, Fan, Box, MemoryStick, Gamepad2 } from 'lucide-react';
+import { Monitor, Keyboard, Mouse, Speaker, Printer, Cpu, HardDrive, CircuitBoard, Calculator, Battery, Fan, Box, MemoryStick, Image } from 'lucide-react';
 
 export const EXTERNAL_PARTS: ComputerPart[] = [
   {
@@ -431,7 +431,7 @@ export const INTERNAL_PARTS: ComputerPart[] = [
       ]
     },
     type: ComponentType.PROCESSING,
-    iconName: 'Gamepad2',
+    iconName: 'Image',
     color: 'bg-red-500'
   },
   {
@@ -529,7 +529,7 @@ export const getIcon = (name: string, size: number = 24, className: string = '')
     case 'MemoryStick': return <MemoryStick {...props} />;
     case 'Battery': return <Battery {...props} />;
     case 'Fan': return <Fan {...props} />;
-    case 'Gamepad2': return <Gamepad2 {...props} />;
+    case 'Image': return <Image {...props} />;
     default: return <Monitor {...props} />;
   }
 };

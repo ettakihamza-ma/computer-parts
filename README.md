@@ -71,6 +71,18 @@ Ce projet est open-source. N'hésitez pas à proposer des améliorations, des no
 
 ## 📝 Historique des Versions
 
+### Version 1.2 (10/02/2026)
+**Nouveautés et Améliorations :**
+- 🕒 **Timers de Jeu** : Ajout d'un chronomètre en temps réel pour les jeux "Mots Mêlés", "Mémoire" et "Sauve le Robot", avec affichage du temps final en cas de victoire.
+- 🏷️ **Nouveau Titre** : L'application s'appelle désormais officiellement **"Explorateur Numérique"**.
+- 🎨 **Icônes Mises à Jour** :
+    - **RAM** : Nouvelle icône "Barrette Mémoire" pour plus de réalisme (au lieu de la calculatrice).
+    - **Carte Graphique** : Nouvelle icône "Image" pour symboliser le traitement graphique.
+- 🐛 **Correctifs Mots Mêlés** :
+    - Support complet des noms arabes avec normalisation (suppression des hamzas pour la grille).
+    - Ajustement des noms trop longs pour s'adapter à la grille 10x10.
+    - Alignement correct de la liste de mots en Arabe (RTL).
+
 ### Version 1.1 (09/02/2026)
 **Améliorations du support de la langue arabe :**
 - ✅ Ajout des lettres arabes manquantes (ة, أ, ئ, etc.) dans les jeux
