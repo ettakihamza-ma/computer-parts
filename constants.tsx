@@ -45,7 +45,11 @@ export const EXTERNAL_PARTS: ComputerPart[] = [
       en: 'Keyboard',
       ar: 'لوحة المفاتيح'
     },
-
+    wordSearchName: {
+      fr: 'Clavier',
+      en: 'Keyboard',
+      ar: 'مفاتيح'
+    },
     action: 'Taper',
     description: {
       fr: "Il sert à écrire des lettres et des chiffres.",
@@ -81,7 +85,11 @@ export const EXTERNAL_PARTS: ComputerPart[] = [
       en: 'Mouse',
       ar: 'فأرة'
     },
-
+    wordSearchName: {
+      fr: 'Souris',
+      en: 'Mouse',
+      ar: 'فارة'
+    },
     action: 'Déplacer',
     description: {
       fr: "Elle sert à cliquer sur les images.",
@@ -117,7 +125,11 @@ export const EXTERNAL_PARTS: ComputerPart[] = [
       en: 'Central Unit',
       ar: 'الوحدة المركزية'
     },
-
+    wordSearchName: {
+      fr: 'Centrale',
+      en: 'Unit',
+      ar: 'مركزية'
+    },
     action: 'Réfléchir',
     description: {
       fr: "C'est le cerveau qui fait tout fonctionner.",
@@ -154,7 +166,11 @@ export const EXTERNAL_PARTS: ComputerPart[] = [
       en: 'Speakers',
       ar: 'مكبرات الصوت'
     },
-
+    wordSearchName: {
+      fr: 'Parleurs',
+      en: 'Speakers',
+      ar: 'مكبرات'
+    },
     action: 'Écouter',
     description: {
       fr: "C'est par ici que sort le son.",
@@ -229,6 +245,11 @@ export const INTERNAL_PARTS: ComputerPart[] = [
       en: 'Motherboard',
       ar: 'اللوحة الأم'
     },
+    wordSearchName: {
+      fr: 'Carte',
+      en: 'Carte',
+      ar: 'لوحة'
+    },
     action: 'Connecter',
     description: {
       fr: "C'est la grande planche verte où tout est branché.",
@@ -262,6 +283,11 @@ export const INTERNAL_PARTS: ComputerPart[] = [
       fr: 'Processeur',
       en: 'Processor (CPU)',
       ar: 'المعالج'
+    },
+    wordSearchName: {
+      fr: 'Processeur',
+      en: 'CPU',
+      ar: 'معالج'
     },
     action: 'Calculer',
     description: {
@@ -298,6 +324,11 @@ export const INTERNAL_PARTS: ComputerPart[] = [
       en: 'RAM Memory',
       ar: 'الذاكرة العشوائية'
     },
+    wordSearchName: {
+      fr: 'Mémoire',
+      en: 'RAM',
+      ar: 'ذاكرة'
+    },
     action: 'Mémoriser',
     description: {
       fr: "C'est la table de travail du processeur.",
@@ -331,6 +362,11 @@ export const INTERNAL_PARTS: ComputerPart[] = [
       fr: 'Disque Dur',
       en: 'Hard Drive',
       ar: 'القرص الصلب'
+    },
+    wordSearchName: {
+      fr: 'Disque',
+      en: 'Drive',
+      ar: 'قرص'
     },
     action: 'Stocker',
     description: {
@@ -366,6 +402,11 @@ export const INTERNAL_PARTS: ComputerPart[] = [
       en: 'Graphics Card',
       ar: 'بطاقة الرسومات'
     },
+    wordSearchName: {
+      fr: 'Graphique',
+      en: 'GPU',
+      ar: 'رسومات'
+    },
     action: 'Dessiner',
     description: {
       fr: "C'est l'artiste qui dessine les images à l'écran.",
@@ -400,6 +441,11 @@ export const INTERNAL_PARTS: ComputerPart[] = [
       en: 'Power Supply',
       ar: 'مزود الطاقة'
     },
+    wordSearchName: {
+      fr: 'Aliment',
+      en: 'Power',
+      ar: 'طاقة'
+    },
     action: 'Nourrir',
     description: {
       fr: "Elle donne l'électricité à tous les composants.",
@@ -431,6 +477,11 @@ export const INTERNAL_PARTS: ComputerPart[] = [
     id: 'fan',
     name: {
       fr: 'Ventilateur',
+      en: 'Fan',
+      ar: 'مروحة'
+    },
+    wordSearchName: {
+      fr: 'Ventilo',
       en: 'Fan',
       ar: 'مروحة'
     },

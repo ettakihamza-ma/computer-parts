@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw, Battery, BatteryCharging, BatteryWarning, ZapOff } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, RefreshCw, Battery, BatteryCharging, BatteryWarning, ZapOff, Clock } from 'lucide-react';
 import { ComputerPart } from '../types';
 import { playLocalAudio } from '../services/audioService';
 
@@ -16,6 +16,9 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
     const maxErrors = 6;
     const [gameOver, setGameOver] = useState(false);
     const [win, setWin] = useState(false);
+    const [elapsedTime, setElapsedTime] = useState(0);
+    const startTimeRef = useRef<number>(Date.now());
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const alphabet = language === 'ar'
         ? 'ابتثجحخدذرزسشصضطظعغفقكلمنهويأإآةؤئ'.split('')
@@ -47,6 +50,12 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
         setErrors(0);
         setGameOver(false);
         setWin(false);
+        setElapsedTime(0);
+        startTimeRef.current = Date.now();
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = setInterval(() => {
+            setElapsedTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+        }, 1000);
         playLocalAudio('start_game', language);
     };
 
@@ -73,13 +82,32 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
         if (isWin) {
             setWin(true);
             setGameOver(true);
+            if (timerRef.current) clearInterval(timerRef.current);
+            const finalTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+            setElapsedTime(finalTime);
             playLocalAudio('game_won', language);
         } else if (isLost) {
             setWin(false);
             setGameOver(true);
+            if (timerRef.current) clearInterval(timerRef.current);
+            const finalTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+            setElapsedTime(finalTime);
             playLocalAudio('game_lost', language); // Assuming generic game lost audio
         }
     }, [guessedLetters, errors, targetWord, language]);
+
+    // Cleanup timer on unmount
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, []);
+
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
 
     // Robot / Battery Visual
     const renderRobotStatus = () => {
@@ -140,12 +168,18 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
                     {language === 'fr' ? 'Sauve le Robot' : language === 'en' ? 'Save the Robot' : 'انقذ الروبوت'}
                 </h2>
 
-                <button
-                    onClick={startNewGame}
-                    className="p-3 bg-kid-purple text-white rounded-full hover:bg-purple-600 transition-colors"
-                >
-                    <RefreshCw size={32} />
-                </button>
+                <div className="flex items-center gap-3">
+                    <div className="text-lg font-bold text-gray-500 flex items-center gap-1">
+                        <Clock size={18} />
+                        <span>{formatTime(elapsedTime)}</span>
+                    </div>
+                    <button
+                        onClick={startNewGame}
+                        className="p-3 bg-kid-purple text-white rounded-full hover:bg-purple-600 transition-colors"
+                    >
+                        <RefreshCw size={32} />
+                    </button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto p-4 flex flex-col items-center max-w-4xl mx-auto w-full">
@@ -197,12 +231,15 @@ export const SaveTheRobotGame: React.FC<SaveTheRobotGameProps> = ({ parts, langu
                         <h2 className={`text-4xl font-bold mb-4 ${win ? 'text-green-500' : 'text-red-500'}`}>
                             {win ? 'Mission Accomplished! 🚀' : 'Mission Failed 🛑'}
                         </h2>
-                        <p className="text-xl mb-6">
+                        <p className="text-xl mb-4">
                             {win
-                                ? (language === 'fr' ? 'Le robot est sauvé !' : 'The robot is saved!')
-                                : (language === 'fr' ? `Le mot était : ${targetWord}` : `The word was: ${targetWord}`)
-                            }
+                                ? (language === 'fr' ? 'Le robot est sauvé !' : language === 'en' ? 'The robot is saved!' : 'تم إنقاذ الروبوت!')
+                                : (language === 'fr' ? `Le mot était : ${targetWord}` : language === 'en' ? `The word was: ${targetWord}` : `الكلمة كانت: ${targetWord}`)}
                         </p>
+                        <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-600 mb-6 bg-gray-100 px-6 py-3 rounded-2xl">
+                            <span>⏱️</span>
+                            <span>{formatTime(elapsedTime)}</span>
+                        </div>
                         <button
                             onClick={startNewGame}
                             className="px-8 py-3 bg-kid-purple text-white text-xl font-bold rounded-full hover:bg-purple-600 transition-transform hover:scale-105 shadow-lg"

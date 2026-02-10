@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { ArrowLeft, RefreshCw, Check, Star } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { ArrowLeft, RefreshCw, Check, Star, Clock } from 'lucide-react';
 import { ComputerPart } from '../types';
 import { playLocalAudio } from '../services/audioService';
 
@@ -13,17 +13,23 @@ const GRID_SIZE = 10;
 
 export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language, onBack }) => {
     const [grid, setGrid] = useState<string[][]>([]);
-    const [words, setWords] = useState<{ word: string; found: boolean; partId: string }[]>([]);
+    const [words, setWords] = useState<{ word: string; displayWord: string; found: boolean; partId: string }[]>([]);
     const [selectedCells, setSelectedCells] = useState<{ r: number; c: number }[]>([]);
     const [foundCells, setFoundCells] = useState<{ r: number; c: number }[]>([]);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    const [elapsedTime, setElapsedTime] = useState(0);
+    const startTimeRef = useRef<number>(Date.now());
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     // Normalize words for the grid (remove accents, spaces, uppercase)
     const normalize = (str: string) => {
         if (language === 'ar') {
-            // For Arabic: just remove spaces and non-Arabic characters
-            return str.replace(/[^\u0600-\u06FF]/g, '');
+            // For Arabic: remove spaces, tashkeel diacritics, and normalize hamza variants
+            return str
+                .replace(/[\u0610-\u061A\u064B-\u065F\u0670]/g, '') // Remove tashkeel/diacritics
+                .replace(/[أإآ]/g, 'ا') // Normalize all hamza-on-alef variants to plain alef
+                .replace(/[^\u0600-\u06FF]/g, ''); // Keep only Arabic characters
         } else {
             // For French/English: remove accents and keep only letters
             return str
@@ -34,8 +40,9 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
         }
     };
 
+    // For Arabic: use only plain alef (no hamza variants) to avoid confusion
     const alphabet = language === 'ar'
-        ? 'ابتثجحخدذرزسشصضطظعغفقكلمنهويأإآةؤئ'
+        ? 'ابتثجحخدذرزسشصضطظعغفقكلمنهوية'
         : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     useEffect(() => {
@@ -43,12 +50,17 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
     }, [language]);
 
     const startNewGame = () => {
-        // 1. Select words
-        const gameWords = parts.map(p => ({
-            word: normalize(p.name[language]),
-            found: false,
-            partId: p.id
-        })).filter(w => w.word.length <= GRID_SIZE); // Ensure words fit
+        // 1. Select words — use wordSearchName if available, otherwise name
+        const gameWords = parts.map(p => {
+            const rawName = p.wordSearchName?.[language] || p.name[language];
+            const normalized = normalize(rawName);
+            return {
+                word: normalized,
+                displayWord: rawName,
+                found: false,
+                partId: p.id
+            };
+        }).filter(w => w.word.length > 0 && w.word.length <= GRID_SIZE); // Ensure words fit
 
         // 2. Initialize empty grid
         const newGrid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
@@ -100,7 +112,14 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
         setGameOver(false);
         setFoundCells([]);
         setSelectedCells([]);
-        playLocalAudio('start_game', language); // Assuming this audio exists or will be generic
+        setElapsedTime(0);
+        startTimeRef.current = Date.now();
+        // Start live timer
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = setInterval(() => {
+            setElapsedTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+        }, 1000);
+        playLocalAudio('start_game', language);
     };
 
     const handleCellClick = (r: number, c: number) => {
@@ -116,9 +135,6 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
             newSelection = [...selectedCells, { r, c }];
         }
 
-        // Sort selection to check for words
-        // Allow simplified selection: just clicking letters. For CP, drag-select is hard.
-        // Let's verify if the current selection forms a word.
         setSelectedCells(newSelection);
         checkSelection(newSelection);
     };
@@ -127,20 +143,17 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
         if (selection.length < 2) return;
 
         // Sort selection by position to allow clicking in any order
-        // First check if it's a horizontal line (all same row)
         const allSameRow = selection.every(cell => cell.r === selection[0].r);
-        // Or vertical line (all same column)
         const allSameCol = selection.every(cell => cell.c === selection[0].c);
 
         if (!allSameRow && !allSameCol) {
-            // Not a valid line - don't check yet, user might still be selecting
             return;
         }
 
         // Sort by column (horizontal) or row (vertical)
         const sortedSelection = [...selection].sort((a, b) => {
-            if (allSameRow) return a.c - b.c; // Sort by column
-            return a.r - b.r; // Sort by row
+            if (allSameRow) return a.c - b.c;
+            return a.r - b.r;
         });
 
         // Check if cells are consecutive
@@ -165,7 +178,7 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
             const newWords = words.map(w => w.word === match.word ? { ...w, found: true } : w);
             setWords(newWords);
             setFoundCells([...foundCells, ...selection]);
-            setSelectedCells([]); // Clear selection
+            setSelectedCells([]);
             setScore(prev => prev + 1);
             playLocalAudio('good_answer', language);
 
@@ -174,14 +187,28 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
 
             if (newWords.every(w => w.found)) {
                 setGameOver(true);
+                if (timerRef.current) clearInterval(timerRef.current);
+                const finalTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+                setElapsedTime(finalTime);
                 playLocalAudio('game_won', language);
             }
         }
     };
 
-    // Improved selection logic: clear if it's getting too long/wrong?
-    // Let's add a "Reset Selection" button or auto-clear after delay? 
-    // No, manual toggle is fine for now.
+    // Cleanup timer on unmount
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, []);
+
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    const isRtl = language === 'ar';
 
     return (
         <div className="flex flex-col h-full bg-gradient-to-b from-blue-50 to-white overflow-hidden absolute inset-0 z-50">
@@ -194,9 +221,15 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                     <ArrowLeft size={32} className="text-gray-600" />
                 </button>
 
-                <div className="text-2xl font-bold text-kid-blue flex items-center gap-2">
-                    <span>{score}/{words.length}</span>
-                    <Star className="text-yellow-400 fill-current" />
+                <div className="flex items-center gap-4">
+                    <div className="text-2xl font-bold text-kid-blue flex items-center gap-2">
+                        <span>{score}/{words.length}</span>
+                        <Star className="text-yellow-400 fill-current" />
+                    </div>
+                    <div className="text-lg font-bold text-gray-500 flex items-center gap-1">
+                        <Clock size={18} />
+                        <span>{formatTime(elapsedTime)}</span>
+                    </div>
                 </div>
 
                 <button
@@ -239,7 +272,8 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                 </div>
 
                 {/* Word List */}
-                <div className="bg-white p-6 rounded-2xl shadow-xl w-full md:w-64">
+                <div className={`bg-white p-6 rounded-2xl shadow-xl w-full md:w-64 ${isRtl ? 'text-right' : ''}`}
+                    dir={isRtl ? 'rtl' : 'ltr'}>
                     <h3 className="text-xl font-bold mb-4 text-center">
                         {language === 'fr' ? 'Mots à trouver' : language === 'en' ? 'Words to find' : 'كلمات للبحث'}
                     </h3>
@@ -252,7 +286,7 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                   ${w.found ? 'bg-green-100 text-green-700' : 'bg-gray-50 text-gray-600'}
                 `}
                             >
-                                <span className={w.found ? 'line-through opacity-70' : ''}>{w.word}</span>
+                                <span className={w.found ? 'line-through opacity-70' : ''}>{w.displayWord}</span>
                                 {w.found && <Check size={20} />}
                             </li>
                         ))}
@@ -264,11 +298,15 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
                     <div className="bg-white p-8 rounded-3xl shadow-2xl text-center transform scale-110">
                         <h2 className="text-4xl font-bold text-kid-blue mb-4">Bravo ! 🎉</h2>
-                        <p className="text-xl mb-8">
+                        <p className="text-xl mb-4">
                             {language === 'fr' ? 'Tu as tout trouvé !' :
                                 language === 'en' ? 'You found everything!' :
                                     'لقد وجدت كل شيء!'}
                         </p>
+                        <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-600 mb-6 bg-gray-100 px-6 py-3 rounded-2xl">
+                            <span>⏱️</span>
+                            <span>{formatTime(elapsedTime)}</span>
+                        </div>
                         <button
                             onClick={startNewGame}
                             className="px-8 py-3 bg-green-500 text-white text-xl font-bold rounded-full hover:bg-green-600 transition-transform hover:scale-105 shadow-lg"

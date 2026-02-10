@@ -43,6 +43,12 @@ export interface ComputerPart {
   type: ComponentType;
   iconName: string;
   color: string;
+  // Short single-word name for word search grid (when full name is too long)
+  wordSearchName?: {
+    fr: string;
+    en: string;
+    ar: string;
+  };
 }
 
 export interface QuizQuestion {

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AppView, ComputerPart, Language, UI_TEXT, ComputerLevel } from './types';
 import { EXTERNAL_PARTS, INTERNAL_PARTS, getPartsForLevel, getIcon } from './constants';
 import { playLocalAudio } from './services/audioService';
-import { ArrowLeft, ArrowRight, Monitor, Gamepad2, Volume2, Search, Brain, HelpCircle, CircuitBoard, HardDrive } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Monitor, Gamepad2, Volume2, Search, Brain, HelpCircle, CircuitBoard, HardDrive, Clock } from 'lucide-react';
 import { DeskMonitor, DeskKeyboard, DeskMouse, DeskTower, DeskSpeaker, DeskPrinter } from './components/DeskParts';
 import { InternalMotherboard, InternalCPU, InternalRAM, InternalGPU, InternalPSU, InternalHDD, InternalFan } from './components/InternalParts';
 import { WordSearchGame } from './components/WordSearchGame';
@@ -90,6 +90,9 @@ export default function App() {
   const [flippedCards, setFlippedCards] = useState<number[]>([]); // Store indices
   const [memorySolved, setMemorySolved] = useState(false);
   const [isProcessingMatch, setIsProcessingMatch] = useState(false);
+  const [memoryElapsedTime, setMemoryElapsedTime] = useState(0);
+  const memoryStartTimeRef = useRef<number>(Date.now());
+  const memoryTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const t = UI_TEXT[language];
   const isRTL = language === 'ar';
@@ -192,6 +195,12 @@ export default function App() {
     setFlippedCards([]);
     setMemorySolved(false);
     setIsProcessingMatch(false);
+    setMemoryElapsedTime(0);
+    memoryStartTimeRef.current = Date.now();
+    if (memoryTimerRef.current) clearInterval(memoryTimerRef.current);
+    memoryTimerRef.current = setInterval(() => {
+      setMemoryElapsedTime(Math.floor((Date.now() - memoryStartTimeRef.current) / 1000));
+    }, 1000);
     setView(AppView.GAME_MEMORY);
   };
 
@@ -235,6 +244,9 @@ export default function App() {
           const remaining = newCards.filter(c => !c.isMatched && c.id !== card1.id && c.id !== card2.id);
           if (remaining.length === 0) {
             setMemorySolved(true);
+            if (memoryTimerRef.current) clearInterval(memoryTimerRef.current);
+            const finalTime = Math.floor((Date.now() - memoryStartTimeRef.current) / 1000);
+            setMemoryElapsedTime(finalTime);
             // No 'Congrats' audio
           }
         }, 800);
@@ -264,6 +276,19 @@ export default function App() {
       setSelectedPart(part);
       setAnimatingId(null);
     }, 600);
+  };
+
+  // Cleanup memory timer on unmount
+  useEffect(() => {
+    return () => {
+      if (memoryTimerRef.current) clearInterval(memoryTimerRef.current);
+    };
+  }, []);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   // --- RENDERERS ---
@@ -567,7 +592,11 @@ export default function App() {
       return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-purple-100 animate-fade-in-up" dir={isRTL ? 'rtl' : 'ltr'}>
           <div className="text-9xl mb-8 animate-bounce">🏆</div>
-          <h2 className="text-5xl font-bold mb-8 text-center font-sans text-purple-600">{t.congrats}</h2>
+          <h2 className="text-5xl font-bold mb-4 text-center font-sans text-purple-600">{t.congrats}</h2>
+          <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-600 mb-6 bg-white/80 px-6 py-3 rounded-2xl">
+            <span>⏱️</span>
+            <span>{formatTime(memoryElapsedTime)}</span>
+          </div>
           <button
             onClick={startMemoryGame}
             className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-4 rounded-3xl shadow-xl text-2xl font-bold"
@@ -596,6 +625,10 @@ export default function App() {
             <BackIcon size={24} />
           </button>
           <h2 className="text-3xl font-bold text-gray-700 font-sans">{t.gameMemoryTitle}</h2>
+          <div className="text-lg font-bold text-gray-500 flex items-center gap-1">
+            <Clock size={18} />
+            <span>{formatTime(memoryElapsedTime)}</span>
+          </div>
         </div>
 
         <div className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl w-full mb-8">
