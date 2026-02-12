@@ -1,70 +1,124 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Explorateur Numérique</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'kid-blue': '#4FACFE',
-              'kid-green': '#43E97B',
-              'kid-yellow': '#FFD200',
-              'kid-orange': '#F78CA0',
-              'kid-purple': '#A18CD1',
-              'kid-dark': '#333333',
-            },
-            fontFamily: {
-              sans: ['Comic Sans MS', 'Comic Sans', 'Verdana', 'sans-serif'],
-            }
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explorateur Numérique</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'kid-blue': '#4FACFE',
+            'kid-green': '#43E97B',
+            'kid-yellow': '#FFD200',
+            'kid-orange': '#F78CA0',
+            'kid-purple': '#A18CD1',
+            'kid-dark': '#333333',
+          },
+          fontFamily: {
+            sans: ['Comic Sans MS', 'Comic Sans', 'Verdana', 'sans-serif'],
           }
         }
       }
-    </script>
-    <style>
-      body {
-        background-color: #f0f9ff;
-      }
-      .wiggle:hover {
-        animation: wiggle 0.5s ease-in-out infinite;
-      }
-      @keyframes wiggle {
-        0% { transform: rotate(0deg); }
-        25% { transform: rotate(-3deg); }
-        50% { transform: rotate(3deg); }
-        75% { transform: rotate(-1deg); }
-        100% { transform: rotate(0deg); }
-      }
-      
-      /* Nouvelles animations */
-      .animate-fade-in-up {
-        animation: fadeInUp 0.5s ease-out forwards;
-      }
-      
-      .animate-pop-bounce {
-        animation: popBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+  </script>
+  <style>
+    body {
+      background-color: #f0f9ff;
+    }
+
+    .wiggle:hover {
+      animation: wiggle 0.5s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+      0% {
+        transform: rotate(0deg);
       }
 
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      25% {
+        transform: rotate(-3deg);
       }
 
-      @keyframes popBounce {
-        0% { transform: scale(1); }
-        40% { transform: scale(1.15); }
-        100% { transform: scale(1); }
+      50% {
+        transform: rotate(3deg);
       }
-    </style>
+
+      75% {
+        transform: rotate(-1deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    /* Nouvelles animations */
+    .animate-fade-in-up {
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .animate-pop-bounce {
+      animation: popBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popBounce {
+      0% {
+        transform: scale(1);
+      }
+
+      40% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .animate-shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-4px);
+      }
+
+      40% {
+        transform: translateX(4px);
+      }
+
+      60% {
+        transform: translateX(-3px);
+      }
+
+      80% {
+        transform: translateX(3px);
+      }
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -76,10 +130,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>

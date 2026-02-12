@@ -19,7 +19,7 @@ Une interface visuelle où chaque composant est présenté avec son nom, une des
 Une exploration spatiale d'un bureau virtuel ! Cliquez sur les équipements (écran, clavier, souris, unité centrale, haut-parleurs, imprimante) pour entendre leur nom et voir s'afficher l'étiquette correspondante.
 
 ### 🎮 Jeux (Play Mode)
-- **Cherche et Trouve** : Un défi de rapidité pour identifier les composants nommés.
+- **Cherche et Trouve** : Un défi de rapidité pour identifier les composants nommés. Les icônes se mélangent après chaque bonne réponse !
 - **Jeu de Mémoire** : Pour associer les paires d'équipements tout en écoutant leur prononciation.
 - **Mots Mêlés** : Une grille interactive pour retrouver le vocabulaire informatique.
 - **Sauve le Robot** : Une version bienveillante du pendu où il faut aider un robot à garder sa batterie en devinant les lettres !
@@ -70,6 +70,16 @@ Ce projet est open-source. N'hésitez pas à proposer des améliorations, des no
 ---
 
 ## 📝 Historique des Versions
+
+### Version 1.3 (12/02/2026)
+**Corrections et Améliorations :**
+- 🐛 **Correctif Mots Mêlés (critique)** : La sélection de lettres s'accumulait indéfiniment et bloquait la validation des mots. La sélection se réinitialise maintenant automatiquement quand elle devient incohérente.
+- 🔴 **Feedback visuel Mots Mêlés** : Ajout d'un flash rouge + shake quand une sélection ne correspond à aucun mot, au lieu de ne rien afficher.
+- ✨ **Animation Mots Mêlés** : Suppression de l'animation `pulse` infinie sur les lettres trouvées (fatigue visuelle).
+- 🔀 **Mélange Cherche et Trouve** : Les icônes sont mélangées au début du jeu et après chaque bonne réponse avec une animation fluide, empêchant la mémorisation des positions.
+- 🔊 **Son bonne réponse** : Ajout de l'audio `good_answer` dans le jeu Cherche et Trouve.
+- 🖥️ **Icône Unité Centrale** : Remplacement du cube générique (`Box`) par l'icône `PcCase` représentant une vraie tour d'ordinateur.
+- 📝 **Mots Mêlés — Imprimante** : Ajout d'un `wordSearchName` court ("Imprime") pour éviter que le mot "IMPRIMANTE" (10 lettres) ne rentre pas dans la grille.
 
 ### Version 1.2 (10/02/2026)
 **Nouveautés et Améliorations :**

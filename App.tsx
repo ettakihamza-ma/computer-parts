@@ -86,6 +86,8 @@ export default function App() {
   const [findGameTarget, setFindGameTarget] = useState<ComputerPart | null>(null);
   const [findGameScore, setFindGameScore] = useState(0);
   const [findGameFeedback, setFindGameFeedback] = useState<'correct' | 'wrong' | null>(null);
+  const [shuffledFindParts, setShuffledFindParts] = useState<ComputerPart[]>([]);
+  const [isShuffling, setIsShuffling] = useState(false);
 
   // Game 2: Memory
   const [memoryCards, setMemoryCards] = useState<MemoryCard[]>([]);
@@ -131,8 +133,18 @@ export default function App() {
   };
 
   // --- FIND GAME LOGIC (RANDOMIZED) ---
+  const shuffleFindParts = () => {
+    const arr = [...currentParts];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
   const startFindGame = () => {
     setFindGameScore(0);
+    setShuffledFindParts(shuffleFindParts());
     pickNewFindTarget();
     setView(AppView.GAME_FIND);
   };
@@ -160,14 +172,19 @@ export default function App() {
     if (partId === findGameTarget.id) {
       setFindGameScore(s => s + 1);
       setFindGameFeedback('correct');
-      // No 'Bravo' audio available in local files
+      playLocalAudio('good_answer', language);
 
       setTimeout(() => {
-        pickNewFindTarget(findGameTarget.id);
-      }, 1500);
+        // Trigger shuffle animation
+        setIsShuffling(true);
+        setTimeout(() => {
+          setShuffledFindParts(shuffleFindParts());
+          setIsShuffling(false);
+          pickNewFindTarget(findGameTarget.id);
+        }, 400);
+      }, 1200);
     } else {
       setFindGameFeedback('wrong');
-      // No 'Try Again' audio available in local files
       setTimeout(() => {
         setFindGameFeedback(null);
       }, 1000);
@@ -575,11 +592,11 @@ export default function App() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          {currentParts.map((part) => (
+          {shuffledFindParts.map((part) => (
             <button
               key={part.id}
               onClick={() => handleFindAnswer(part.id)}
-              className={`${part.color} p-6 rounded-2xl shadow-md hover:opacity-90 transform transition active:scale-95 flex justify-center items-center h-32 border-b-4 border-black/10`}
+              className={`${part.color} p-6 rounded-2xl shadow-md hover:opacity-90 transform transition-all duration-300 active:scale-95 flex justify-center items-center h-32 border-b-4 border-black/10 ${isShuffling ? 'scale-0 rotate-180 opacity-0' : 'scale-100 rotate-0 opacity-100'}`}
             >
               {getIcon(part.iconName, 48, "text-white")}
             </button>

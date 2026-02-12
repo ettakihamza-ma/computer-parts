@@ -16,6 +16,7 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
     const [words, setWords] = useState<{ word: string; displayWord: string; found: boolean; partId: string }[]>([]);
     const [selectedCells, setSelectedCells] = useState<{ r: number; c: number }[]>([]);
     const [foundCells, setFoundCells] = useState<{ r: number; c: number }[]>([]);
+    const [wrongCells, setWrongCells] = useState<{ r: number; c: number }[]>([]);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -130,9 +131,22 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
 
         let newSelection;
         if (isSelected) {
+            // Deselect this cell
             newSelection = selectedCells.filter(cell => cell.r !== r || cell.c !== c);
         } else {
-            newSelection = [...selectedCells, { r, c }];
+            // Try adding the cell to the current selection
+            const tentative = [...selectedCells, { r, c }];
+
+            // Check if the new selection is still aligned (all same row OR all same col)
+            const allSameRow = tentative.every(cell => cell.r === tentative[0].r);
+            const allSameCol = tentative.every(cell => cell.c === tentative[0].c);
+
+            if (tentative.length >= 2 && !allSameRow && !allSameCol) {
+                // Selection is no longer coherent — start fresh from this cell
+                newSelection = [{ r, c }];
+            } else {
+                newSelection = tentative;
+            }
         }
 
         setSelectedCells(newSelection);
@@ -147,6 +161,8 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
         const allSameCol = selection.every(cell => cell.c === selection[0].c);
 
         if (!allSameRow && !allSameCol) {
+            // This should not happen anymore (handled in handleCellClick), but safety net
+            setSelectedCells([]);
             return;
         }
 
@@ -191,6 +207,17 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                 const finalTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
                 setElapsedTime(finalTime);
                 playLocalAudio('game_won', language);
+            }
+        } else {
+            // Check if selection length matches any unfound word length
+            // If it does and no match → wrong answer, flash red & reset
+            const hasMatchingLength = words.some(w => !w.found && w.word.length === selection.length);
+            if (hasMatchingLength) {
+                setWrongCells([...selection]);
+                setTimeout(() => {
+                    setWrongCells([]);
+                    setSelectedCells([]);
+                }, 500);
             }
         }
     };
@@ -252,6 +279,7 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                         row.map((letter, c) => {
                             const isSelected = selectedCells.some(cell => cell.r === r && cell.c === c);
                             const isFound = foundCells.some(cell => cell.r === r && cell.c === c);
+                            const isWrong = wrongCells.some(cell => cell.r === r && cell.c === c);
 
                             return (
                                 <div
@@ -259,9 +287,10 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                                     onClick={() => handleCellClick(r, c)}
                                     className={`
                     w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-lg md:text-xl font-bold rounded cursor-pointer transition-all
-                    ${isFound ? 'bg-green-400 text-white animate-pulse' :
-                                            isSelected ? 'bg-kid-orange text-white transform scale-110' :
-                                                'bg-white text-gray-700 hover:bg-blue-50'}
+                    ${isWrong ? 'bg-red-400 text-white animate-shake' :
+                                            isFound ? 'bg-green-400 text-white' :
+                                                isSelected ? 'bg-kid-orange text-white transform scale-110' :
+                                                    'bg-white text-gray-700 hover:bg-blue-50'}
                   `}
                                 >
                                     {letter}
