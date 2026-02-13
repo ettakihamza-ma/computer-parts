@@ -209,10 +209,16 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                 playLocalAudio('game_won', language);
             }
         } else {
-            // Check if selection length matches any unfound word length
-            // If it does and no match → wrong answer, flash red & reset
-            const hasMatchingLength = words.some(w => !w.found && w.word.length === selection.length);
-            if (hasMatchingLength) {
+            // Check if this selection is a valid prefix of ANY unfound word (forward or reverse)
+            // If it's dead end, trigger wrong feedback immediately
+            // This allows building "IMPRIMANTE" without fail at "IMPRI"
+            const isPossiblePrefix = words.some(w => {
+                if (w.found) return false;
+                const reversed = w.word.split('').reverse().join('');
+                return w.word.startsWith(selectedString) || reversed.startsWith(selectedString);
+            });
+
+            if (!isPossiblePrefix) {
                 setWrongCells([...selection]);
                 setTimeout(() => {
                     setWrongCells([]);
@@ -288,9 +294,10 @@ export const WordSearchGame: React.FC<WordSearchGameProps> = ({ parts, language,
                                     className={`
                     w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-lg md:text-xl font-bold rounded cursor-pointer transition-all
                     ${isWrong ? 'bg-red-400 text-white animate-shake' :
-                                            isFound ? 'bg-green-400 text-white' :
+                                            isSelected && isFound ? 'bg-yellow-400 text-white transform scale-110 ring-2 ring-green-400' :
                                                 isSelected ? 'bg-kid-orange text-white transform scale-110' :
-                                                    'bg-white text-gray-700 hover:bg-blue-50'}
+                                                    isFound ? 'bg-green-400 text-white' :
+                                                        'bg-white text-gray-700 hover:bg-blue-50'}
                   `}
                                 >
                                     {letter}

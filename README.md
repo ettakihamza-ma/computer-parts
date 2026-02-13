@@ -29,10 +29,11 @@ Une exploration spatiale d'un bureau virtuel ! Cliquez sur les équipements (éc
 ## 🛠️ Stack Technique
 
 - **Framework** : [React.js](https://reactjs.org/) avec [Vite](https://vitejs.dev/)
+- **Architecture** : Modulaire (Composants séparés pour chaque jeu/vue)
 - **Styling** : [Tailwind CSS](https://tailwindcss.com/) pour une interface moderne et responsive.
 - **Icons** : [Lucide React](https://lucide.dev/)
 - **Audio** : [ElevenLabs](https://elevenlabs.io/) pour une synthèse vocale de haute qualité dans les trois langues.
-- **Développement** : "Vibe coded" avec l'aide de **AI Studio** et **Antigravity (Google)**.
+- **Développement** : "Vibe coded" avec l'aide de **Google AI Studio**.
 - **Hébergement** : Déployé sur **Vercel**.
 
 ---
@@ -71,35 +72,30 @@ Ce projet est open-source. N'hésitez pas à proposer des améliorations, des no
 
 ## 📝 Historique des Versions
 
+### Version 1.4 (13/02/2026)
+**Refactoring Majeur & Améliorations UX**
+- 🏗️ **Architecture Modulaire** : Refonte complète du code (`App.tsx` scindé en multiples composants) pour une meilleure maintenabilité et évolutivité.
+- 🟡 **Amélioration Mots Mêlés** : Les lettres partagées entre deux mots s'affichent désormais en jaune (mélange vert/orange) pour éviter la confusion.
+- ✅ **Validation Intelligente** : Le jeu Mots Mêlés ne signale plus une erreur prématurément tant que la sélection reste une possibilité valide (préfixe d'un mot).
+- 🧹 **Nettoyage de Code** : Suppression du code mort et optimisation des imports.
+
 ### Version 1.3 (12/02/2026)
 **Corrections et Améliorations :**
-- 🐛 **Correctif Mots Mêlés (critique)** : La sélection de lettres s'accumulait indéfiniment et bloquait la validation des mots. La sélection se réinitialise maintenant automatiquement quand elle devient incohérente.
-- 🔴 **Feedback visuel Mots Mêlés** : Ajout d'un flash rouge + shake quand une sélection ne correspond à aucun mot, au lieu de ne rien afficher.
-- ✨ **Animation Mots Mêlés** : Suppression de l'animation `pulse` infinie sur les lettres trouvées (fatigue visuelle).
-- 🔀 **Mélange Cherche et Trouve** : Les icônes sont mélangées au début du jeu et après chaque bonne réponse avec une animation fluide, empêchant la mémorisation des positions.
-- 🔊 **Son bonne réponse** : Ajout de l'audio `good_answer` dans le jeu Cherche et Trouve.
-- 🖥️ **Icône Unité Centrale** : Remplacement du cube générique (`Box`) par l'icône `PcCase` représentant une vraie tour d'ordinateur.
-- 📝 **Mots Mêlés — Imprimante** : Ajout d'un `wordSearchName` court ("Imprime") pour éviter que le mot "IMPRIMANTE" (10 lettres) ne rentre pas dans la grille.
+- � **Correctif Mots Mêlés (critique)** : La sélection de lettres s'accumulait indéfiniment et bloquait la validation des mots.
+- � **Feedback visuel** : Ajout d'un flash rouge quand une sélection est incorrecte.
+- � **Mélange Cherche et Trouve** : Les icônes sont mélangées après chaque bonne réponse.
+- � **Son** : Ajout de l'audio `good_answer` dans le jeu Cherche et Trouve.
 
 ### Version 1.2 (10/02/2026)
 **Nouveautés et Améliorations :**
-- 🕒 **Timers de Jeu** : Ajout d'un chronomètre en temps réel pour les jeux "Mots Mêlés", "Mémoire" et "Sauve le Robot", avec affichage du temps final en cas de victoire.
-- 🏷️ **Nouveau Titre** : L'application s'appelle désormais officiellement **"Explorateur Numérique"**.
-- 🎨 **Icônes Mises à Jour** :
-    - **RAM** : Nouvelle icône "Barrette Mémoire" pour plus de réalisme (au lieu de la calculatrice).
-    - **Carte Graphique** : Nouvelle icône "Image" pour symboliser le traitement graphique.
-- 🐛 **Correctifs Mots Mêlés** :
-    - Support complet des noms arabes avec normalisation (suppression des hamzas pour la grille).
-    - Ajustement des noms trop longs pour s'adapter à la grille 10x10.
-    - Alignement correct de la liste de mots en Arabe (RTL).
+- 🕒 **Timers de Jeu** : Ajout d'un chronomètre.
+- 🏷️ **Nouveau Titre** : "Explorateur Numérique".
+- 🐛 **Correctifs Mots Mêlés** : Support complet des noms arabes.
 
 ### Version 1.1 (09/02/2026)
 **Améliorations du support de la langue arabe :**
-- ✅ Ajout des lettres arabes manquantes (ة, أ, ئ, etc.) dans les jeux
-- ✅ Correction de l'affichage RTL (droite à gauche) pour les mots arabes
-- ✅ Correction du bug de normalisation des caractères arabes
-- ✅ Amélioration du jeu "Mots Mêlés" : possibilité de cliquer les lettres dans n'importe quel ordre
-- ✅ Séparation de la logique de normalisation pour les scripts arabes et latins
+- ✅ Ajout des lettres arabes manquantes.
+- ✅ Correction de l'affichage RTL.
 
 ---
 
