@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppView, ComputerLevel, Language, UI_TEXT } from '../types';
-import { ArrowLeft, ArrowRight, Monitor, CircuitBoard, Gamepad2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Monitor, CircuitBoard, Gamepad2, Mouse } from 'lucide-react';
 import { LanguageSelector } from './LanguageSelector';
 
 interface HomeViewProps {
@@ -38,7 +38,11 @@ export const HomeView: React.FC<HomeViewProps> = ({ language, setLanguage, curre
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-kid-blue mb-2 drop-shadow-md tracking-wider font-sans">{t.title}</h1>
             <div className="bg-white/60 px-6 py-2 rounded-full mb-4">
                 <span className="text-xl font-bold text-kid-blue/80 uppercase tracking-widest">
-                    {currentLevel === 'internal' ? (language === 'fr' ? 'Niveau Expert' : 'Expert Level') : (language === 'fr' ? 'Niveau Débutant' : 'Beginner Level')}
+                    {currentLevel === 'internal'
+                        ? (language === 'fr' ? 'Niveau Expert' : language === 'en' ? 'Expert Level' : 'مستوى خبير')
+                        : currentLevel === 'intermediate'
+                            ? (language === 'fr' ? 'Niveau Intermédiaire' : language === 'en' ? 'Intermediate Level' : 'مستوى متوسط')
+                            : (language === 'fr' ? 'Niveau Découverte' : language === 'en' ? 'Beginner Level' : 'مستوى مبتدئ')}
                 </span>
             </div>
             <p className="text-2xl text-gray-600 max-w-lg font-sans leading-relaxed bg-white/50 p-4 rounded-xl">{t.subtitle}</p>
@@ -58,11 +62,17 @@ export const HomeView: React.FC<HomeViewProps> = ({ language, setLanguage, curre
                 >
                     {currentLevel === 'internal' ? (
                         <CircuitBoard size={64} className="mb-4 group-hover:scale-110 transition-transform text-white" />
+                    ) : currentLevel === 'intermediate' ? (
+                        <Mouse size={64} className="mb-4 group-hover:scale-110 transition-transform text-white" />
                     ) : (
                         <Monitor size={64} className="mb-4 group-hover:scale-110 transition-transform text-white" />
                     )}
                     <span className="text-3xl font-bold font-sans">
-                        {currentLevel === 'internal' ? (language === 'fr' ? "Intérieur" : language === 'en' ? "Inside" : "الداخل") : t.desk}
+                        {currentLevel === 'internal'
+                            ? (language === 'fr' ? "Intérieur" : language === 'en' ? "Inside" : "الداخل")
+                            : currentLevel === 'intermediate'
+                                ? (language === 'fr' ? "Périphériques" : language === 'en' ? "Peripherals" : "الأجهزة")
+                                : t.desk}
                     </span>
                 </button>
 
@@ -73,6 +83,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ language, setLanguage, curre
                     <Gamepad2 size={64} className="mb-4 group-hover:rotate-12 transition-transform" />
                     <span className="text-3xl font-bold font-sans">{t.play}</span>
                 </button>
+            </div>
+
+            {/* Credits Footer */}
+            <div className="mt-auto pt-8 pb-4 w-full text-center">
+                <p className="text-sm font-sans text-gray-500 bg-white/40 inline-block px-4 py-1 rounded-full">
+                    {language === 'fr' ? <>Développé avec passion par <a href="https://www.linkedin.com/in/ettaki/" target="_blank" rel="noopener noreferrer" className="text-kid-blue hover:underline font-bold transition-all">Hamza Ettaki</a></> :
+                        language === 'en' ? <>Developed with passion by <a href="https://www.linkedin.com/in/ettaki/" target="_blank" rel="noopener noreferrer" className="text-kid-blue hover:underline font-bold transition-all">Hamza Ettaki</a></> :
+                            <>تم التطوير بشغف بواسطة <a href="https://www.linkedin.com/in/ettaki/" target="_blank" rel="noopener noreferrer" className="text-kid-blue hover:underline font-bold transition-all">حمزة الطاكي</a></>}
+                </p>
             </div>
         </div>
     );

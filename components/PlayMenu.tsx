@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppView, Language, UI_TEXT } from '../types';
-import { ArrowLeft, ArrowRight, Search, Brain, Gamepad2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Search, Brain, Gamepad2, ArrowUpDown } from 'lucide-react';
 
 interface PlayMenuProps {
     language: Language;
@@ -66,6 +66,17 @@ export const PlayMenu: React.FC<PlayMenuProps> = ({ language, onNavigate, onBack
                     </span>
                 </button>
             </div>
+
+            {/* Game 5: Input/Output Sorter */}
+            <button
+                onClick={() => onNavigate(AppView.GAME_INPUT_OUTPUT)}
+                className="bg-teal-400 hover:bg-teal-300 text-white p-6 rounded-3xl shadow-xl transform transition hover:scale-105 flex flex-col items-center w-full border-b-8 border-teal-600 group md:col-span-2 md:w-1/2 md:mx-auto"
+            >
+                <ArrowUpDown size={48} className="mb-4 group-hover:scale-110 transition-transform" />
+                <span className="text-xl font-bold font-sans">
+                    {language === 'fr' ? 'Le Trieur (Entrée/Sortie)' : language === 'en' ? 'The Sorter (Input/Output)' : 'المصنف (إدخال/إخراج)'}
+                </span>
+            </button>
         </div>
     );
 };

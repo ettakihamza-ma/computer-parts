@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComputerLevel, Language, UI_TEXT } from '../types';
-import { Monitor, CircuitBoard } from 'lucide-react';
+import { Monitor, CircuitBoard, Headphones, Usb } from 'lucide-react';
 import { LanguageSelector } from './LanguageSelector';
 
 interface LevelSelectionProps {
@@ -23,14 +23,14 @@ export const LevelSelection: React.FC<LevelSelectionProps> = ({ language, setLan
                 {language === 'fr' ? "Choisis ton niveau !" : language === 'en' ? "Choose your level!" : "اختر مستواك!"}
             </p>
 
-            <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl justify-center">
+            <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl justify-center">
                 {/* Level 1: External */}
                 <button
                     onClick={() => onSelectLevel('external')}
                     className="group relative flex-1 bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-8 border-blue-200"
                 >
                     <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-6 py-2 rounded-full font-bold shadow-lg">
-                        {language === 'fr' ? "Débutant" : language === 'en' ? "Beginner" : "مبتدئ"}
+                        {language === 'fr' ? "Découverte" : language === 'en' ? "Beginner" : "مبتدئ"}
                     </div>
                     <div className="bg-blue-50 rounded-full p-8 mb-6 inline-block group-hover:bg-blue-100 transition-colors">
                         <Monitor size={80} className="text-blue-500" />
@@ -42,6 +42,27 @@ export const LevelSelection: React.FC<LevelSelectionProps> = ({ language, setLan
                         {language === 'fr' ? "Découvre l'ordinateur et ses amis (Clavier, Souris...)" :
                             language === 'en' ? "Discover the computer and friends (Keyboard, Mouse...)" :
                                 "اكتشف الحاسوب وأصدقائه (لوحة المفاتيح، الفأرة...)"}
+                    </p>
+                </button>
+
+                {/* Level 3: Intermediate */}
+                <button
+                    onClick={() => onSelectLevel('intermediate')}
+                    className="group relative flex-1 bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-8 border-cyan-200"
+                >
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-cyan-500 text-white px-6 py-2 rounded-full font-bold shadow-lg">
+                        {language === 'fr' ? "Intermédiaire" : language === 'en' ? "Intermediate" : "متوسط"}
+                    </div>
+                    <div className="bg-cyan-50 rounded-full p-8 mb-6 inline-block group-hover:bg-cyan-100 transition-colors">
+                        <Headphones size={80} className="text-cyan-500" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-gray-800 mb-2 font-sans">
+                        {language === 'fr' ? "Les Périphériques" : language === 'en' ? "Peripherals" : "الأجهزة الطرفية"}
+                    </h2>
+                    <p className="text-gray-500 font-sans">
+                        {language === 'fr' ? "Webcam, Casque, Clé USB..." :
+                            language === 'en' ? "Webcam, Headphones, USB..." :
+                                "كاميرا، سماعة، مفتاح USB..."}
                     </p>
                 </button>
 
@@ -65,6 +86,15 @@ export const LevelSelection: React.FC<LevelSelectionProps> = ({ language, setLan
                                 "اكتشف ما بداخل الوحدة المركزية (المعالج، اللوحة الأم...)"}
                     </p>
                 </button>
+            </div>
+
+            {/* Credits Footer */}
+            <div className="mt-auto pt-8 pb-4 w-full text-center">
+                <p className="text-sm font-sans text-gray-500 bg-white/40 inline-block px-4 py-1 rounded-full">
+                    {language === 'fr' ? <>Développé avec passion par <a href="https://www.linkedin.com/in/ettaki/" target="_blank" rel="noopener noreferrer" className="text-kid-blue hover:underline font-bold transition-all">Hamza Ettaki</a></> :
+                        language === 'en' ? <>Developed with passion by <a href="https://www.linkedin.com/in/ettaki/" target="_blank" rel="noopener noreferrer" className="text-kid-blue hover:underline font-bold transition-all">Hamza Ettaki</a></> :
+                            <>تم التطوير بشغف بواسطة <a href="https://www.linkedin.com/in/ettaki/" target="_blank" rel="noopener noreferrer" className="text-kid-blue hover:underline font-bold transition-all">حمزة الطاكي</a></>}
+                </p>
             </div>
         </div>
     );

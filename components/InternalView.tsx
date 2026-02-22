@@ -12,6 +12,8 @@ interface InternalViewProps {
 
 export const InternalView: React.FC<InternalViewProps> = ({ parts, language, onBack }) => {
     const [selectedPart, setSelectedPart] = useState<ComputerPart | null>(null);
+    const [isFanRemoved, setIsFanRemoved] = useState(false);
+    const [isFanSpinning, setIsFanSpinning] = useState(false);
 
     const t = UI_TEXT[language];
     const isRTL = language === 'ar';
@@ -26,6 +28,25 @@ export const InternalView: React.FC<InternalViewProps> = ({ parts, language, onB
         if (part) {
             setSelectedPart(part);
             handleSpeak(part.id, 'name');
+        }
+    };
+
+    const handleFanClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        handleSpeak('fan', 'name');
+
+        // Fix: Set selected part so the name appears at the bottom
+        const fanPart = parts.find(p => p.id === 'fan');
+        if (fanPart) {
+            setSelectedPart(fanPart);
+        }
+
+        if (!isFanSpinning) {
+            setIsFanSpinning(true);
+            // Spin for 3 seconds then stop
+            setTimeout(() => {
+                setIsFanSpinning(false);
+            }, 3000);
         }
     };
 
@@ -51,14 +72,20 @@ export const InternalView: React.FC<InternalViewProps> = ({ parts, language, onB
                     onClick={() => handlePartClick('motherboard')}
                 />
 
-                {/* CPU + Fan (Fan on top) */}
+                {/* CPU (Left) */}
                 <InternalCPU
-                    style={{ top: '35%', left: '42%', width: '16%', height: '25%' }}
+                    style={{ top: '35%', left: '28%', width: '16%', height: '25%' }}
                     onClick={() => handlePartClick('cpu')}
                 />
+
+                {/* Fan (Right) - Toggle visibility on click */}
                 <InternalFan
-                    style={{ top: '35%', left: '42%', width: '16%', height: '25%', opacity: 0.9 }}
-                    onClick={() => handlePartClick('fan')}
+                    style={{
+                        top: '35%', left: '48%', width: '16%', height: '25%',
+                        opacity: 1, cursor: 'pointer'
+                    }}
+                    onClick={handleFanClick}
+                    className={isFanSpinning ? 'animate-spin' : ''}
                 />
 
                 {/* RAM Slots */}

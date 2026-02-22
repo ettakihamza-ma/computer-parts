@@ -88,8 +88,8 @@ export const InternalHDD: React.FC<PartProps> = ({ onClick, className, style }) 
 export const InternalFan: React.FC<PartProps> = ({ onClick, className, style }) => (
     <div
         onClick={onClick}
-        className={`absolute bg-gray-800 rounded-full border-4 border-gray-600 shadow-md cursor-pointer group hover:rotate-45 transition-transform flex items-center justify-center ${className}`}
-        style={style}
+        className={`absolute bg-gray-800 rounded-full border-4 border-gray-600 shadow-md cursor-pointer group hover:rotate-45 transition-transform flex items-center justify-center z-30 ${className}`}
+        style={{ ...style, opacity: style?.opacity ?? 1, display: 'flex' }}
     >
         <Fan className="text-cyan-400 w-full h-full p-2 animate-[spin_3s_linear_infinite] group-hover:animate-[spin_1s_linear_infinite]" />
     </div>

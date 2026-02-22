@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppView, ComputerLevel, Language } from './types';
-import { EXTERNAL_PARTS, getPartsForLevel } from './constants';
+import { EXTERNAL_PARTS, INTERMEDIATE_PARTS, getPartsForLevel } from './constants';
 import { LevelSelection } from './components/LevelSelection';
 import { HomeView } from './components/HomeView';
 import { PlayMenu } from './components/PlayMenu';
@@ -9,8 +9,10 @@ import { FindGame } from './components/FindGame';
 import { MemoryGame } from './components/MemoryGame';
 import { WordSearchGame } from './components/WordSearchGame';
 import { SaveTheRobotGame } from './components/SaveTheRobotGame';
+import { InputOutputGame } from './components/InputOutputGame';
 import { DeskView } from './components/DeskView';
 import { InternalView } from './components/InternalView';
+import { PeripheralsView } from './components/PeripheralsView';
 
 export default function App() {
   const [currentLevel, setCurrentLevel] = useState<ComputerLevel | null>(null);
@@ -95,9 +97,22 @@ export default function App() {
           onBack={goPlayMenu}
         />
       );
+    case AppView.GAME_INPUT_OUTPUT:
+      // Combine EXTERNAL + INTERMEDIATE for the sorting game to have enough items
+      const combinedParts = [...EXTERNAL_PARTS, ...INTERMEDIATE_PARTS];
+      return (
+        <InputOutputGame
+          parts={combinedParts}
+          language={language}
+          onBack={goPlayMenu}
+        />
+      );
     case AppView.DESK:
       if (currentLevel === 'internal') {
         return <InternalView parts={currentParts} language={language} onBack={goHome} />;
+      }
+      if (currentLevel === 'intermediate') {
+        return <PeripheralsView parts={currentParts} language={language} onBack={goHome} />;
       }
       return <DeskView parts={currentParts} language={language} onBack={goHome} />;
     default:

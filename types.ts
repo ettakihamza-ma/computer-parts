@@ -2,7 +2,7 @@ import { LucideIcon } from 'lucide-react';
 
 export type Language = 'fr' | 'en' | 'ar';
 
-export type ComputerLevel = 'external' | 'internal';
+export type ComputerLevel = 'external' | 'internal' | 'intermediate';
 
 export enum AppView {
   HOME = 'HOME',
@@ -12,6 +12,7 @@ export enum AppView {
   GAME_MEMORY = 'game_memory',
   GAME_WORDSEARCH = 'game_wordsearch',
   GAME_ROBOT = 'game_robot',
+  GAME_INPUT_OUTPUT = 'game_input_output',
   DESK = 'DESK'
 }
 
@@ -20,6 +21,24 @@ export enum ComponentType {
   OUTPUT = 'SORTIE',
   PROCESSING = 'TRAITEMENT'
 }
+
+export const COMPONENT_TYPE_TRANSLATIONS: Record<ComponentType, { fr: string, en: string, ar: string }> = {
+  [ComponentType.INPUT]: {
+    fr: 'Périphérique d\'Entrée',
+    en: 'Input Device',
+    ar: 'وحدة إدخال'
+  },
+  [ComponentType.OUTPUT]: {
+    fr: 'Périphérique de Sortie',
+    en: 'Output Device',
+    ar: 'وحدة إخراج'
+  },
+  [ComponentType.PROCESSING]: {
+    fr: 'Traitement / Stockage',
+    en: 'Processing / Storage',
+    ar: 'معالجة / تخزين'
+  }
+};
 
 export interface ComputerPart {
   id: string;

@@ -1,5 +1,5 @@
-import { Language } from '../types';
-import { AUDIO_MAP } from '../audioMapping';
+import { Language } from '../../types';
+import { AUDIO_MAP } from '../../audioMapping';
 
 export const playLocalAudio = async (partId: string, language: Language, type: 'name' | 'description' = 'name'): Promise<void> => {
     return new Promise((resolve, reject) => {

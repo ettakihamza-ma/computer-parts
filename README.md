@@ -23,6 +23,7 @@ Une exploration spatiale d'un bureau virtuel ! Cliquez sur les équipements (éc
 - **Jeu de Mémoire** : Pour associer les paires d'équipements tout en écoutant leur prononciation.
 - **Mots Mêlés** : Une grille interactive pour retrouver le vocabulaire informatique.
 - **Sauve le Robot** : Une version bienveillante du pendu où il faut aider un robot à garder sa batterie en devinant les lettres !
+- **Le Trieur (Nouveau !)** : Un jeu de tri pour apprendre la différence entre les périphériques d'**Entrée** (vers l'ordi) et de **Sortie** (depuis l'ordi).
 
 ---
 
@@ -72,19 +73,33 @@ Ce projet est open-source. N'hésitez pas à proposer des améliorations, des no
 
 ## 📝 Historique des Versions
 
+### Version 1.6 (22/02/2026)
+**Refonte Visuelle des Périphériques et Détails Pédagogiques**
+- 📱 **Nouvelle Interface "Grille"** : La vue du niveau intermédiaire (Les Périphériques) a été repensée avec une grille moderne, remplaçant la disposition absolue sur la table.
+- 🔍 **Mise en Avant via Popup (Modal)** : Lorsqu'un composant est cliqué, toutes ses informations détaillées (nom, fonction courte, bouton audio) s'affichent proprement dans une fenêtre centrale, libérant l'interface principale.
+- 🏷️ **Badges Entrée/Sortie/Traitement** : Ajout d'une étiquette visuelle traduite dans les 3 langues dans le popup pour indiquer clairement la nature du périphérique (ex: "📥 Périphérique d'Entrée" pour le micro).
+- 🌐 **Correction des traductions** : L'action de chaque élément (ex: "💡 Filmer") a été traduite et ajoutée au registre multilingue de l'application.
+- 🛡️ **Sécurité** : Reformulation de la description de la Webcam pour sensibiliser à la notion de partage avec de "tierces personnes".
+
+### Version 1.5 (13/02/2026)
+**Nouveau Niveau Intermédiaire & Jeu de Tri**
+- 🆕 **Niveau Intermédiaire** : Ajout d'une nouvelle catégorie "Les Périphériques" contenant : Webcam, Microphone, Casque, Manette, Scanner et Clé USB.
+- 🎮 **Nouveau Jeu "Le Trieur"** : Un jeu drag-and-drop ou clic pour classer les composants en "Entrée" (Input) ou "Sortie" (Output).
+- 🎨 **Icônes Exclusives** : Ajout d'icônes spécifiques pour distinguer Scanner/Imprimante et Clé USB/Disquette.
+- ✏️ **Rédaction** : Ajustements des descriptions pour être plus neutres (remplacement de "musique/chant" par "son/parler").
+
 ### Version 1.4 (13/02/2026)
 **Refactoring Majeur & Améliorations UX**
 - 🏗️ **Architecture Modulaire** : Refonte complète du code (`App.tsx` scindé en multiples composants) pour une meilleure maintenabilité et évolutivité.
 - 🟡 **Amélioration Mots Mêlés** : Les lettres partagées entre deux mots s'affichent désormais en jaune (mélange vert/orange) pour éviter la confusion.
-- ✅ **Validation Intelligente** : Le jeu Mots Mêlés ne signale plus une erreur prématurément tant que la sélection reste une possibilité valide (préfixe d'un mot).
-- 🧹 **Nettoyage de Code** : Suppression du code mort et optimisation des imports.
+- ✅ **Validation Intelligente** : Le jeu Mots Mêlés ne signale plus une erreur prématurément tant que la sélection reste une possibilité valide.
 
 ### Version 1.3 (12/02/2026)
 **Corrections et Améliorations :**
-- � **Correctif Mots Mêlés (critique)** : La sélection de lettres s'accumulait indéfiniment et bloquait la validation des mots.
-- � **Feedback visuel** : Ajout d'un flash rouge quand une sélection est incorrecte.
-- � **Mélange Cherche et Trouve** : Les icônes sont mélangées après chaque bonne réponse.
-- � **Son** : Ajout de l'audio `good_answer` dans le jeu Cherche et Trouve.
+- 🐛 **Correctif Mots Mêlés (critique)** : La sélection de lettres s'accumulait indéfiniment et bloquait la validation des mots.
+- 🔴 **Feedback visuel** : Ajout d'un flash rouge quand une sélection est incorrecte.
+- 🔀 **Mélange Cherche et Trouve** : Les icônes sont mélangées après chaque bonne réponse.
+- 🔊 **Son** : Ajout de l'audio `good_answer` dans le jeu Cherche et Trouve.
 
 ### Version 1.2 (10/02/2026)
 **Nouveautés et Améliorations :**

@@ -1,5 +1,5 @@
 import { ComputerPart, ComponentType, ComputerLevel } from './types';
-import { Monitor, Keyboard, Mouse, Speaker, Printer, Cpu, HardDrive, CircuitBoard, Calculator, Battery, Fan, PcCase, MemoryStick, Image } from 'lucide-react';
+import { Monitor, Keyboard, Mouse, Speaker, Printer, Cpu, HardDrive, CircuitBoard, Calculator, Battery, Fan, PcCase, MemoryStick, Image, Camera, Mic, Headphones, Gamepad, ScanLine, Usb } from 'lucide-react';
 
 export const EXTERNAL_PARTS: ComputerPart[] = [
   {
@@ -179,18 +179,18 @@ export const EXTERNAL_PARTS: ComputerPart[] = [
     },
     facts: {
       fr: [
-        "Ils te permettent d'entendre la musique des jeux.",
+        "Ils te permettent d'entendre le son des jeux.",
         "Tu peux monter ou baisser le volume.",
         "C'est par ici que sort le son de l'ordinateur.",
         "Sans eux, tu n'entendrais rien du tout !"
       ],
       en: [
-        "They let you hear music from games.",
+        "They let you hear sound from games.",
         "You can turn the volume up or down.",
         "The computer sound comes out of them."
       ],
       ar: [
-        "يسمح لك بسماع الموسيقى من الألعاب.",
+        "يسمعك أصوات الألعاب.",
         "يمكنك رفع أو خفض الصوت.",
         "منه يخرج صوت الحاسوب."
       ]
@@ -518,6 +518,238 @@ export const INTERNAL_PARTS: ComputerPart[] = [
   }
 ];
 
+export const INTERMEDIATE_PARTS: ComputerPart[] = [
+  {
+    id: 'webcam',
+    name: {
+      fr: 'Webcam',
+      en: 'Webcam',
+      ar: 'كاميرا الويب'
+    },
+    action: 'Filmer',
+    description: {
+      fr: "Elle filme ton visage pour le partager avec d'autres personnes.",
+      en: "It films your face to share it with other people.",
+      ar: "تصور وجهك لمشاركته مع أشخاص آخرين."
+    },
+    facts: {
+      fr: [
+        "C'est grâce à elle qu'on fait des appels vidéo.",
+        "Elle est souvent en haut de l'écran.",
+        "Attention, il faut demander la permission avant de l'utiliser !"
+      ],
+      en: [
+        "Used for video calls.",
+        "Often on top of the screen.",
+        "Ask permission before using!"
+      ],
+      ar: [
+        "بفضلها نجري مكالمات فيديو.",
+        "غالباً ما تكون فوق الشاشة.",
+        "يجب طلب الإذن قبل استخدامها!"
+      ]
+    },
+    type: ComponentType.INPUT,
+    iconName: 'Camera',
+    color: 'bg-cyan-400'
+  },
+  {
+    id: 'microphone',
+    name: {
+      fr: 'Microphone',
+      en: 'Microphone',
+      ar: 'ميكروفون'
+    },
+    wordSearchName: {
+      fr: 'Micro',
+      en: 'Mic',
+      ar: 'مايك'
+    },
+    action: 'Parler',
+    description: {
+      fr: "Il écoute ta voix quand tu parles.",
+      en: "It listens to your voice when you speak.",
+      ar: "يسمع صوتك عندما تتحدث."
+    },
+    facts: {
+      fr: [
+        "Il transforme ta voix en signal pour l'ordinateur.",
+        "On l'utilise pour parler ou discuter.",
+        "Parfois il est accroché au casque."
+      ],
+      en: [
+        "Sends your voice to the computer.",
+        "Used for speaking or chatting.",
+        "Sometimes attached to headphones."
+      ],
+      ar: [
+        "يحول صوتك إلى إشارة للحاسوب.",
+        "نستخدمه للتحدث أو المحادثة.",
+        "أحياناً يكون ملتصقاً بالسماعة."
+      ]
+    },
+    type: ComponentType.INPUT,
+    iconName: 'Mic',
+    color: 'bg-rose-400'
+  },
+  {
+    id: 'headphones',
+    name: {
+      fr: 'Casque Audio',
+      en: 'Headphones',
+      ar: 'سماعة الرأس'
+    },
+    wordSearchName: {
+      fr: 'Casque',
+      en: 'Headset',
+      ar: 'سماعة'
+    },
+    action: 'Écouter',
+    description: {
+      fr: "Pour écouter le son sans déranger les autres.",
+      en: "To listen to sound without disturbing others.",
+      ar: "لسماع الصوت دون إزعاج الآخرين." // Corrected translation
+    },
+    facts: {
+      fr: [
+        "Le son arrive directement dans tes oreilles.",
+        "C'est pratique pour jouer ou regarder des vidéos en silence.",
+        "Attention à ne pas mettre le son trop fort !"
+      ],
+      en: [
+        "Sound goes straight to your ears.",
+        "Good for playing silently.",
+        "Don't turn it up too loud!"
+      ],
+      ar: [
+        "يصل الصوت مباشرة لأذنيك.",
+        "مفيد للعب بصمت.",
+        "لا ترفع الصوت عالياً جداً!"
+      ]
+    },
+    type: ComponentType.OUTPUT,
+    iconName: 'Headphones',
+    color: 'bg-indigo-400'
+  },
+  {
+    id: 'gamepad',
+    name: {
+      fr: 'Manette de Jeu',
+      en: 'Gamepad',
+      ar: 'يد التحكم'
+    },
+    wordSearchName: {
+      fr: 'Manette',
+      en: 'Gamepad',
+      ar: 'يد تحكم'
+    },
+    action: 'Jouer',
+    description: {
+      fr: "C'est pour contrôler tes personnages dans les jeux.",
+      en: "To control characters in games.",
+      ar: "للتحكم في شخصيات الألعاب."
+    },
+    facts: {
+      fr: [
+        "Elle a des boutons et des joysticks.",
+        "C'est plus facile que le clavier pour certains jeux.",
+        "Elle peut vibrer quand il y a de l'action !"
+      ],
+      en: [
+        "Has buttons and joysticks.",
+        "Easier than keyboard for some games.",
+        "It can vibrate!"
+      ],
+      ar: [
+        "بها أزرار وعصا تحكم.",
+        "أسهل من لوحة المفاتيح في بعض الألعاب.",
+        "يمكن أن تهتز عند الحركة!"
+      ]
+    },
+    type: ComponentType.INPUT,
+    iconName: 'Gamepad',
+    color: 'bg-violet-400'
+  },
+  {
+    id: 'scanner',
+    name: {
+      fr: 'Scanner',
+      en: 'Scanner',
+      ar: 'الماسح الضوئي'
+    },
+    wordSearchName: {
+      fr: 'Scanner',
+      en: 'Scanner',
+      ar: 'ماسح'
+    },
+    action: 'Numériser',
+    description: {
+      fr: "Il transforme tes dessins papier en image sur l'écran.",
+      en: "Turns paper drawings into screen images.",
+      ar: "يحول رسوماتك الورقية إلى صور على الشاشة."
+    },
+    facts: {
+      fr: [
+        "C'est comme une photocopieuse, mais l'image va dans l'ordinateur.",
+        "Il utilise une lumière qui passe sur la feuille.",
+        "C'est magique pour garder tes dessins pour toujours !"
+      ],
+      en: [
+        "Like a copier but image goes to PC.",
+        "Uses light to see the paper.",
+        "Keeps your drawings forever."
+      ],
+      ar: [
+        "مثل آلة النسخ لكن الصورة تذهب للحاسوب.",
+        "يستخدم الضوء لرؤية الورقة.",
+        "يحفظ رسوماتك للأبد!"
+      ]
+    },
+    type: ComponentType.INPUT,
+    iconName: 'ScanLine',
+    color: 'bg-teal-400'
+  },
+  {
+    id: 'usb',
+    name: {
+      fr: 'Clé USB',
+      en: 'USB Key',
+      ar: 'مفتاح USB'
+    },
+    wordSearchName: {
+      fr: 'Clé USB',
+      en: 'USB',
+      ar: 'USB'
+    },
+    action: 'Transporter',
+    description: {
+      fr: "Une petite boîte pour transporter tes fichiers dans ta poche.",
+      en: "A tiny box to carry files in your pocket.",
+      ar: "علبة صغيرة لحمل ملفاتك في جيبك."
+    },
+    facts: {
+      fr: [
+        "On la branche sur le port USB.",
+        "On peut y mettre des photos, des devoirs, des jeux...",
+        "Attention à ne pas la perdre, elle est toute petite !"
+      ],
+      en: [
+        "Plugs into USB port.",
+        "Can hold photos, homework, games...",
+        "Small, so don't lose it!"
+      ],
+      ar: [
+        "توضع في منفذ USB.",
+        "يمكن وضع الصور والواجبات بها.",
+        "صغيرة جداً، انتبه لا تضيعها!"
+      ]
+    },
+    type: ComponentType.PROCESSING, // It's storage, kinda processing/storage
+    iconName: 'Usb',
+    color: 'bg-fuchsia-400'
+  }
+];
+
 export const getIcon = (name: string, size: number = 24, className: string = '') => {
   const props = { size, className };
   switch (name) {
@@ -534,10 +766,17 @@ export const getIcon = (name: string, size: number = 24, className: string = '')
     case 'Battery': return <Battery {...props} />;
     case 'Fan': return <Fan {...props} />;
     case 'Image': return <Image {...props} />;
+    case 'Camera': return <Camera {...props} />;
+    case 'Mic': return <Mic {...props} />;
+    case 'Headphones': return <Headphones {...props} />;
+    case 'Gamepad': return <Gamepad {...props} />;
+    case 'ScanLine': return <ScanLine {...props} />;
+    case 'Usb': return <Usb {...props} />;
     default: return <Monitor {...props} />;
   }
 };
 
-export const getPartsForLevel = (level: ComputerLevel): ComputerPart[] => {
+export const getPartsForLevel = (level: ComputerLevel | 'intermediate'): ComputerPart[] => {
+  if (level === 'intermediate') return INTERMEDIATE_PARTS;
   return level === 'internal' ? INTERNAL_PARTS : EXTERNAL_PARTS;
 };
